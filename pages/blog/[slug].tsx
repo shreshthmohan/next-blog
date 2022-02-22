@@ -1,10 +1,17 @@
 import BlogLayout from "layouts/blog";
+import { useMDXComponent } from "next-contentlayer/hooks";
 
 import { allPosts } from "contentlayer/generated";
 import type { Post } from "contentlayer/generated";
 
 export default function Post({ post }: { post: Post }) {
-  return <BlogLayout post={post}></BlogLayout>;
+  const Component = useMDXComponent(post.body.code);
+
+  return (
+    <BlogLayout post={post}>
+      <Component />
+    </BlogLayout>
+  );
 }
 
 export async function getStaticPaths() {

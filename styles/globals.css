@@ -1,3 +1,48 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  html,
+  body {
+    margin: 0px;
+  }
+  main {
+    @apply text-xl;
+  }
+  h1 {
+    @apply text-gray-900 text-4xl font-normal;
+  }
+  h2 {
+    @apply text-3xl font-normal relative;
+  }
+  p {
+    @apply leading-relaxed;
+  }
+  /* TODO: Move this to nav/ nav link component? */
+  nav a {
+    @apply text-xl text-gray-400 hover:text-gray-500 no-underline hover:underline decoration-gray-500 underline-offset-2 mr-2;
+  }
+}
+
+.article-body .intra-page-link {
+  @apply absolute no-underline;
+
+  margin-left: -1em;
+  padding-right: 0.5em;
+  width: 100%;
+  cursor: pointer;
+}
+
+.article-body .intra-page-link:after {
+  @apply text-gray-200 dark:text-gray-700;
+  content: "#";
+}
+
+.intra-page-link:hover:after {
+  @apply text-gray-500;
+}
+
+.article-body *:hover > .intra-page-link:after {
+  @apply text-gray-500;
+}

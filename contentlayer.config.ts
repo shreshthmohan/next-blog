@@ -11,6 +11,7 @@ export const Post = defineDocumentType(() => ({
   contentType: "mdx",
   fields: {
     title: { type: "string", required: true },
+    summary: { type: "string" },
     date: { type: "date" },
     draft: { type: "boolean" },
   },
@@ -31,7 +32,16 @@ export default makeSource({
       rehypeSlug,
       rehypeCodeTitles,
       rehypePrism,
-      rehypeAutolinkHeadings,
+      [
+        rehypeAutolinkHeadings,
+        {
+          // https://github.com/rehypejs/rehype-autolink-headings#optionsproperties
+          properties: {
+            className: ["intra-page-link"],
+            ariaHidden: true,
+          },
+        },
+      ],
     ],
   },
 });
