@@ -46,3 +46,7 @@
 .article-body *:hover > .intra-page-link:after {
   @apply text-gray-500;
 }
+
+.skip-to-content {
+  @apply absolute px-4 py-3  transform -translate-y-12 -left-1/4 focus:top-0 focus:translate-y-0 -top-8;
+}

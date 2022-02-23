@@ -1,12 +1,27 @@
 import Head from "next/head";
-
+import Link from "next/link";
 import { useRouter } from "next/router";
-// import { useState, useEffect } from "react";
 import Footer from "./Footer";
 
 const siteRoot = "https://shreshth.dev";
 const siteName = "Shreshth Mohan";
 const twitterHandle = "@shreshthmohan";
+
+function NavLink({ href, text }) {
+  const router = useRouter();
+  const isActive = router.asPath === href;
+
+  return (
+    <Link href={href}>
+      <a
+        className={`${isActive ? "text-gray-600 " : "text-gray-400 "}
+           font-normal text-xl hover:text-gray-500 no-underline hover:underline decoration-gray-500 underline-offset-2 mr-2`}
+      >
+        {text}
+      </a>
+    </Link>
+  );
+}
 
 export default function Container(props) {
   const { children, ...customMeta } = props;
@@ -14,7 +29,6 @@ export default function Container(props) {
   const meta = {
     title: "Shreshth Mohan",
     description: "Web developer",
-    // image: "",
     type: "website",
     ...customMeta,
   };
@@ -43,17 +57,24 @@ export default function Container(props) {
       </Head>
       <div className="flex flex-col min-h-full">
         <div className="mx-auto max-w-prose pt-10">
-          <header>
-            {/* TODO: skip to content */}
-            <nav>
+          <header className="relative">
+            <a className="skip-to-content" href="#main-content">
+              Skip navigation
+            </a>
+            <nav role="navigation">
               <span>
-                {/* <a href="/">Home</a> */}
-                {/* <a href="/about/">About + Now</a> */}
+                {/* TODO test a11y */}
+                <NavLink href="/" text="Home" />
+                <NavLink href="/about" text="About + Now" />
+                {/* blog */}
+                {/* projects */}
+                {/* snippets/components */}
+                {/* tools/uses */}
               </span>
             </nav>
           </header>
 
-          <main id="skip" className="md:pt-10 md:pb-24">
+          <main id="main-content" className="md:pt-10 md:pb-24">
             {children}
           </main>
         </div>
