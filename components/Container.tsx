@@ -2,10 +2,7 @@ import Head from 'next/head'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import Footer from './Footer'
-
-const siteRoot = 'https://shreshth.dev'
-const siteName = 'Shreshth Mohan'
-const twitterHandle = '@shreshthmohan'
+import MetaHead from './MetaHead'
 
 function NavLink({ href, text }) {
   const router = useRouter()
@@ -24,37 +21,11 @@ function NavLink({ href, text }) {
 }
 
 export default function Container(props) {
-  const { children, ...customMeta } = props
-  const router = useRouter()
-  const meta = {
-    title: 'Shreshth Mohan',
-    description: 'Web developer',
-    type: 'website',
-    ...customMeta,
-  }
+  const { children, ...meta } = props
 
   return (
     <div className="font-serif h-full ">
-      <Head>
-        <title>{meta.title}</title>
-        <meta name="robots" content="follow, index" />
-        <meta content={meta.description} name="description" />
-        <meta property="og:url" content={`${siteRoot}${router.asPath}`} />
-        <link rel="canonical" href={`${siteRoot}${router.asPath}`} />
-        <meta property="og:type" content={meta.type} />
-        <meta property="og:site_name" content={siteName} />
-        <meta property="og:description" content={meta.description} />
-        <meta property="og:title" content={meta.title} />
-        {/* <meta property="og:image" content={meta.image} /> */}
-        {/* <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:site" content={twitterHandle} />
-        <meta name="twitter:title" content={meta.title} />
-        <meta name="twitter:description" content={meta.description} />
-        <meta name="twitter:image" content={meta.image} /> */}
-        {meta.date && (
-          <meta property="article:published_time" content={meta.date} />
-        )}
-      </Head>
+      <MetaHead {...meta} />
       <div className="flex flex-col min-h-full justify-between">
         <div className="mx-auto max-w-prose pt-10">
           <header className="relative">
