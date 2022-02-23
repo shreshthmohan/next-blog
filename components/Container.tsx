@@ -61,7 +61,7 @@ export default function Container(props) {
             <a className="skip-to-content" href="#main-content">
               Skip navigation
             </a>
-            <nav role="navigation">
+            <nav role="navigation" className="text-center">
               <span>
                 {/* TODO test a11y */}
                 <NavLink href="/" text="Home" />
