@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react'
 import { generateRandomNumber } from './genRandom'
 import { checkGuess } from './checkGuess'
 
+const formatHint = ({ bulls, cows }) => `${bulls}B ${cows}C`
+
 export function BullsAndCows({ guessLength = 4 }) {
   const [guessHistory, setGuessHistory] = useState([])
   const [guess, setGuess] = useState('')
@@ -17,7 +19,6 @@ export function BullsAndCows({ guessLength = 4 }) {
   }, [guessLength])
 
   const submitErrorMessage = `Make a guess that has ${guessLength} digits`
-  const formatHint = ({ bulls, cows }) => `${bulls}B ${cows}C`
   const checkWin = ({ bulls }) => bulls === guessLength
 
   const resetGame = () => {
@@ -59,40 +60,65 @@ export function BullsAndCows({ guessLength = 4 }) {
         ...guessHistory,
         { value: guessValue, hint: checkGuess(secret, guessValue) },
       ])
+      setGuess('')
     } else {
       setSubmitError(true)
     }
   }
 
+  // const won = true
   const won = guessHistory.length
     ? checkWin(guessHistory[guessHistory.length - 1].hint)
     : false
 
   return (
-    <div>
-      <div>
+    // TODO bullsandcows layout: bg-lime-50 at top level
+    <div className="font-mono text-gray-700 w-[24rem] max-w-[100vw] px-4 box-border">
+      <div className="text-center py-4">
         {guessHistory.map((g, i) => (
           <div key={i}>
-            <span>{g.value}</span>-<span>{formatHint(g.hint)}</span>
+            <span>{g.value}</span>
+            {' · '}
+            <span>{formatHint(g.hint)}</span>
           </div>
         ))}
       </div>
-      <form onSubmit={handleGuessSubmit}>
-        <input
-          type="number"
-          placeholder={Array.from({ length: guessLength }, () => '•').join('')}
-          name="guess"
-          value={guess}
-          onChange={handleGuessChange}
-        />
-        <button>Guess</button>
-        <div>{submitError && submitErrorMessage}</div>
-        <div>Secret: {secret}</div>
-        {won && <button onClick={resetGame}>Play another around</button>}
-        {won &&
-          `You figured out the secret number in ${guessHistory.length} ${
-            guessHistory.length === 1 ? 'try' : 'tries'
-          }.`}
+      <form className="flex flex-col" onSubmit={handleGuessSubmit}>
+        <div className="flex justify-between">
+          {!won && (
+            <input
+              className="font-mono w-full text-gray-700 font-bold py-2 border-solid border border-gray-300 rounded-full shadow-sm placeholder-gray-200 focus:outline-none hover:shadow-inner focus:shadow-inner focus:ring-lime-500 focus:border-lime-500 text-xl text-center"
+              type="number"
+              placeholder={Array.from({ length: guessLength }, () => '•').join(
+                '',
+              )}
+              name="guess"
+              value={guess}
+              onChange={handleGuessChange}
+            />
+          )}
+        </div>
+        {!won && (
+          <button className="font-sans mt-2 w-full flex justify-center py-2 px-4 border border-transparent rounded-full shadow-lg hover:shadow-md text-xl font-bold text-white bg-lime-500 hover:bg-lime-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-lime-500">
+            Guess
+          </button>
+        )}
+        <div className=" mt-2 font-bold text-sm text-center text-red-500">
+          {submitError && submitErrorMessage}
+        </div>
+        {won && (
+          <span className="text-sm text-center font-bold">{`You figured out the secret number in ${
+            guessHistory.length
+          } ${guessHistory.length === 1 ? 'try' : 'tries'}!`}</span>
+        )}
+        {won && (
+          <button
+            className="font-sans mt-2 w-full flex justify-center py-2 px-4 border border-transparent rounded-full shadow-lg hover:shadow-md text-xl font-bold text-white bg-lime-500 hover:bg-lime-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-lime-500"
+            onClick={resetGame}
+          >
+            Play another around
+          </button>
+        )}
       </form>
     </div>
   )

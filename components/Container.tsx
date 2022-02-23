@@ -1,40 +1,40 @@
-import Head from "next/head";
-import Link from "next/link";
-import { useRouter } from "next/router";
-import Footer from "./Footer";
+import Head from 'next/head'
+import Link from 'next/link'
+import { useRouter } from 'next/router'
+import Footer from './Footer'
 
-const siteRoot = "https://shreshth.dev";
-const siteName = "Shreshth Mohan";
-const twitterHandle = "@shreshthmohan";
+const siteRoot = 'https://shreshth.dev'
+const siteName = 'Shreshth Mohan'
+const twitterHandle = '@shreshthmohan'
 
 function NavLink({ href, text }) {
-  const router = useRouter();
-  const isActive = router.asPath === href;
+  const router = useRouter()
+  const isActive = router.asPath === href
 
   return (
     <Link href={href}>
       <a
-        className={`${isActive ? "text-gray-600 " : "text-gray-400 "}
+        className={`${isActive ? 'text-gray-600 ' : 'text-gray-400 '}
            font-normal text-xl hover:text-gray-500 no-underline hover:underline decoration-gray-500 underline-offset-2 mr-2`}
       >
         {text}
       </a>
     </Link>
-  );
+  )
 }
 
 export default function Container(props) {
-  const { children, ...customMeta } = props;
-  const router = useRouter();
+  const { children, ...customMeta } = props
+  const router = useRouter()
   const meta = {
-    title: "Shreshth Mohan",
-    description: "Web developer",
-    type: "website",
+    title: 'Shreshth Mohan',
+    description: 'Web developer',
+    type: 'website',
     ...customMeta,
-  };
+  }
 
   return (
-    <div className="font-serif">
+    <div className="font-serif h-full ">
       <Head>
         <title>{meta.title}</title>
         <meta name="robots" content="follow, index" />
@@ -55,7 +55,7 @@ export default function Container(props) {
           <meta property="article:published_time" content={meta.date} />
         )}
       </Head>
-      <div className="flex flex-col min-h-full">
+      <div className="flex flex-col min-h-full justify-between">
         <div className="mx-auto max-w-prose pt-10">
           <header className="relative">
             <a className="skip-to-content" href="#main-content">
@@ -87,7 +87,7 @@ export default function Container(props) {
               href="https://twitter.com/shreshthmohan"
             >
               @shreshthmohan
-            </a>{" "}
+            </a>{' '}
             Email:
             <a
               rel="noreferrer"
@@ -100,5 +100,5 @@ export default function Container(props) {
         </Footer>
       </div>
     </div>
-  );
+  )
 }
