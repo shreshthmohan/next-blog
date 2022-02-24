@@ -17,17 +17,13 @@
     @apply text-xl;
   }
   h1 {
-    @apply text-gray-900 text-4xl font-normal;
+    @apply text-4xl font-normal text-gray-900;
   }
   h2 {
-    @apply text-3xl font-normal relative;
+    @apply relative text-3xl font-normal;
   }
   p {
     @apply leading-relaxed;
-  }
-  /* TODO: Move this to nav/ nav link component? */
-  nav a {
-    @apply text-xl text-gray-400 hover:text-gray-500 no-underline hover:underline decoration-gray-500 underline-offset-2 mr-2;
   }
 }
 
@@ -54,5 +50,5 @@
 }
 
 .skip-to-content {
-  @apply absolute px-4 py-3  transform -translate-y-12 -left-1/4 focus:top-0 focus:translate-y-0 -top-8;
+  @apply absolute -left-1/4 -top-8  -translate-y-12 transform px-4 py-3 focus:top-0 focus:translate-y-0;
 }

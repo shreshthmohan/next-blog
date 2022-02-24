@@ -73,10 +73,10 @@ export function BullsAndCows({ guessLength = 4 }) {
 
   return (
     // TODO bullsandcows layout: bg-lime-50 at top level
-    <div className="font-mono text-gray-700 w-[24rem] max-w-[100vw] px-4 box-border">
-      <div className="text-center py-4">
+    <div className="bulls-and-cows box-border font-mono  text-gray-700">
+      <div className="py-4">
         {guessHistory.map((g, i) => (
-          <div key={i}>
+          <div className="text-xl" key={i}>
             <span>{g.value}</span>
             {' · '}
             <span>{formatHint(g.hint)}</span>
@@ -87,7 +87,7 @@ export function BullsAndCows({ guessLength = 4 }) {
         <div className="flex justify-between">
           {!won && (
             <input
-              className="font-mono w-full text-gray-700 font-bold py-2 border-solid border border-gray-300 rounded-full shadow-sm placeholder-gray-200 focus:outline-none hover:shadow-inner focus:shadow-inner focus:ring-lime-500 focus:border-lime-500 text-xl text-center"
+              className="w-full rounded-full border border-solid border-gray-300 py-2 text-center font-mono text-xl font-bold text-gray-700 placeholder-gray-200 shadow-sm hover:shadow-inner focus:border-lime-500 focus:shadow-inner focus:outline-none focus:ring-lime-500 "
               type="number"
               placeholder={Array.from({ length: guessLength }, () => '•').join(
                 '',
@@ -99,21 +99,21 @@ export function BullsAndCows({ guessLength = 4 }) {
           )}
         </div>
         {!won && (
-          <button className="font-sans mt-2 w-full flex justify-center py-2 px-4 border border-transparent rounded-full shadow-lg hover:shadow-md text-xl font-bold text-white bg-lime-500 hover:bg-lime-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-lime-500">
+          <button className="mt-2 flex w-full justify-center rounded-full border border-transparent bg-lime-500 py-2 px-4 text-center font-sans text-xl font-bold text-white shadow-lg hover:bg-lime-600 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-lime-500 focus:ring-offset-2 ">
             Guess
           </button>
         )}
-        <div className=" mt-2 font-bold text-sm text-center text-red-500">
+        <div className=" mt-2 text-sm font-bold text-red-500">
           {submitError && submitErrorMessage}
         </div>
         {won && (
-          <span className="text-sm text-center font-bold">{`You figured out the secret number in ${
+          <span className="text-sm font-bold">{`You figured out the secret number in ${
             guessHistory.length
           } ${guessHistory.length === 1 ? 'try' : 'tries'}!`}</span>
         )}
         {won && (
           <button
-            className="font-sans mt-2 w-full flex justify-center py-2 px-4 border border-transparent rounded-full shadow-lg hover:shadow-md text-xl font-bold text-white bg-lime-500 hover:bg-lime-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-lime-500"
+            className="mt-2 flex w-full justify-center rounded-full border border-transparent bg-lime-500 py-2 px-4 font-sans text-xl font-bold text-white shadow-lg hover:bg-lime-600 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-lime-500 focus:ring-offset-2"
             onClick={resetGame}
           >
             Play another around

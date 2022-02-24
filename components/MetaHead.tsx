@@ -7,18 +7,22 @@ const {
   description,
   type,
   twitterHandle,
-  bannerImagePathname,
+  defaultImagePathname,
 } = siteWide
 
-export default function MetaHead(props) {
+export default function MetaHead(props: {
+  imagePathname?: string
+  date?: string
+}) {
   const router = useRouter()
 
+  const { imagePathname = defaultImagePathname } = props
   const meta = {
     title: siteName,
     description,
     type,
     twitterHandle,
-    image: bannerImagePathname ? siteRoot + bannerImagePathname : null,
+    image: imagePathname ? siteRoot + imagePathname : null,
     ...props,
   }
   return (

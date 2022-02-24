@@ -5,5 +5,5 @@ export const siteWide = {
   type: 'website',
   description:
     'A site featuring projects and content on web development and data visualisation. d3.js, SVG, JavaScript, React, HTML, CSS',
-  bannerImagePathname: '/images/banner.jpg', // for default og:image, twitter:image
+  defaultImagePathname: '/images/banner.jpg', // for default og:image, twitter:image
 }
