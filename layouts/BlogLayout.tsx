@@ -18,7 +18,7 @@ export default function BlogLayout({
       type="article"
     >
       <article className="mx-auto mb-16 flex w-full max-w-2xl flex-col items-start justify-center">
-        <h1 className="mb-4 text-center text-3xl tracking-tight text-black md:text-5xl ">
+        <h1 className="mx-auto mb-4 text-center text-3xl tracking-tight text-black md:text-5xl ">
           {post.title}
         </h1>
         <div className="mt-2 flex w-full flex-col items-start justify-between md:flex-row md:items-center"></div>
