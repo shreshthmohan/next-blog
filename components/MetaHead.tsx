@@ -13,6 +13,8 @@ const {
 export default function MetaHead(props: {
   imagePathname?: string
   date?: string
+  title?: string
+  description?: string
 }) {
   const router = useRouter()
 

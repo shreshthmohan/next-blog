@@ -22,6 +22,9 @@
   h2 {
     @apply relative text-3xl font-normal;
   }
+  h3 {
+    @apply relative text-2xl font-normal;
+  }
   p {
     @apply leading-relaxed;
   }

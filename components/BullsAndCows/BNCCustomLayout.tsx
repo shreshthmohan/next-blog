@@ -9,6 +9,7 @@ export default function BNCCustomLayout({ children, ...restProps }) {
   const meta = { ...defaultMeta, ...restProps }
   return (
     <div className="min-h-full bg-lime-50   font-sans ">
+      <MetaHead {...meta} />
       <div className="px-4 pt-6 pb-16 sm:px-6 lg:px-8 ">
         <div className="text-right text-sm">
           <a
@@ -29,7 +30,6 @@ export default function BNCCustomLayout({ children, ...restProps }) {
           </a>
         </div>
 
-        <MetaHead {...meta} />
         <h1 className="my-16 text-center font-sans text-4xl font-bold tracking-tight text-lime-500">
           Bulls and Cows
         </h1>
