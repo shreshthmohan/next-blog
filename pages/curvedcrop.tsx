@@ -1,6 +1,7 @@
 import { NextPage } from 'next'
 import { roundedPolygonByCircumRadius } from 'curved-polygon'
-import React, { useState } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
+import { Canvg } from 'canvg'
 
 const svgSide = 400
 const defaultImage = '/images/egg.jpg'
@@ -14,9 +15,35 @@ const CurvedCrop: NextPage = () => {
   const [borderRadius, setBorderRadius] = useState(50)
   const [rotate, setRotate] = useState(0)
   const [imageFile, setImageFile] = useState(null)
+  const imageEditorRef = useRef(null)
+  const canvasRef = useRef(null)
+  const imageLinkRef = useRef(null)
 
   const handleSidesChange = e => {
     setSideCount(parseInt(e.target.value))
+  }
+
+  useEffect(() => {
+    const canvas = canvasRef.current as HTMLCanvasElement
+    const imageEditor = imageEditorRef.current
+    const ctx = canvas.getContext('2d')
+
+    const v = Canvg.fromString(ctx, imageEditor.outerHTML)
+    v.start()
+
+    const link = imageLinkRef.current
+    link.download = 'curvedcrop.png'
+    link.href = canvas.toDataURL('image/png')
+
+    return () => {
+      v.stop()
+    }
+  })
+
+  const handleDownloadImage = () => {
+    if (imageLinkRef.current) {
+      imageLinkRef.current.click()
+    }
   }
 
   const shapeCenter = { cx: svgSide / 2 + cxOffset, cy: svgSide / 2 + cyOffset }
@@ -106,10 +133,12 @@ const CurvedCrop: NextPage = () => {
         </div>
 
         <svg
+          id="cropped-image-editor"
           width={svgSide}
           height={svgSide}
           viewBox={`0 0 ${svgSide} ${svgSide}`}
           className="border border-solid border-gray-300 bg-gray-100"
+          ref={imageEditorRef}
         >
           <image
             href={imgSrc}
@@ -127,6 +156,9 @@ const CurvedCrop: NextPage = () => {
             />
           </clipPath>
         </svg>
+        <button onClick={handleDownloadImage}>Download image</button>
+        <canvas className="hidden" ref={canvasRef}></canvas>
+        <a className="hidden" ref={imageLinkRef}></a>
       </main>
     </div>
   )

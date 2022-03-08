@@ -12,6 +12,7 @@
     "@mdx-js/loader": "^2.0.0",
     "@next/mdx": "^12.1.0",
     "autoprefixer": "^10.4.2",
+    "canvg": "^4.0.0",
     "contentlayer": "^0.1.1",
     "curved-polygon": "../portfolio/curved-polygons",
     "next": "12.1.0",
