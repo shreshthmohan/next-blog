@@ -3,19 +3,20 @@ import { roundedPolygonByCircumRadius } from 'curved-polygon'
 import React, { useState } from 'react'
 
 const svgSide = 400
-const defaultImage = '/images/shreshth.jpg'
+const defaultImage = '/images/egg.jpg'
 const sideCountLimits = { min: 3, max: 10 }
 
 const CurvedCrop: NextPage = () => {
-  const [sideCount, setSideCount] = useState(3)
+  const [sideCount, setSideCount] = useState(6)
   const [circumRadius, setCircumRadius] = useState(svgSide / 2)
   const [cxOffset, setCxOffset] = useState(0)
   const [cyOffset, setCyOffset] = useState(0)
   const [borderRadius, setBorderRadius] = useState(50)
   const [rotate, setRotate] = useState(0)
+  const [imageFile, setImageFile] = useState(null)
 
   const handleSidesChange = e => {
-    setSideCount(e.target.value)
+    setSideCount(parseInt(e.target.value))
   }
 
   const shapeCenter = { cx: svgSide / 2 + cxOffset, cy: svgSide / 2 + cyOffset }
@@ -29,10 +30,23 @@ const CurvedCrop: NextPage = () => {
 
   const clipPathId = `polygon-sided-${sideCount}`
 
+  const imgSrc = imageFile ? URL.createObjectURL(imageFile) : defaultImage
+
   return (
     <div className="flex font-sans">
       <main className="mx-auto my-32 flex flex-col ">
-        <div className="flex w-[400px] flex-wrap gap-x-3 text-sm">
+        <div className="mb-6 flex w-[400px] flex-wrap gap-x-3 text-sm">
+          <input
+            type="file"
+            accept="image/*"
+            onChange={function (e) {
+              console.log(e.target.files)
+              if (e.target.files.length) {
+                setImageFile(e.target.files[0])
+              }
+            }}
+          />
+
           <label>
             Sides
             <input
@@ -98,7 +112,7 @@ const CurvedCrop: NextPage = () => {
           className="border border-solid border-gray-300 bg-gray-100"
         >
           <image
-            href={defaultImage}
+            href={imgSrc}
             x="0"
             y="0"
             width={svgSide}
