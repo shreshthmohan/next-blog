@@ -76,7 +76,7 @@ const CurvedCrop: NextPage = () => {
           select(this).attr('fill', 'black').classed('brightness-110', false)
         }),
     )
-  })
+  }, []) // no need to attach drag listeners everytime something changes
 
   const handleSidesChange = e => {
     setSideCount(parseInt(e.target.value))
