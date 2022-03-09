@@ -2,6 +2,7 @@ import { NextPage } from 'next'
 import { roundedPolygonByCircumRadius } from 'curved-polygon'
 import React, { useState, useRef, useEffect } from 'react'
 import { Canvg } from 'canvg'
+import { select, drag } from 'd3'
 
 const svgSide = 400
 const defaultImage = '/images/egg.jpg'
@@ -15,13 +16,25 @@ const CurvedCrop: NextPage = () => {
   const [borderRadius, setBorderRadius] = useState(50)
   const [rotate, setRotate] = useState(0)
   const [imageFile, setImageFile] = useState(null)
+  const [imagePos, setImagePos] = useState([0, 0])
+
+  const [imageX, imageY] = imagePos
+
   const imageEditorRef = useRef(null)
   const canvasRef = useRef(null)
   const imageLinkRef = useRef(null)
+  const imageShapeRef = useRef(null)
+  // const outputImageRef = useRef(null)
 
-  const handleSidesChange = e => {
-    setSideCount(parseInt(e.target.value))
-  }
+  const mountedRef = useRef(false)
+
+  useEffect(() => {
+    mountedRef.current = true
+
+    return () => {
+      mountedRef.current = false
+    }
+  }, [])
 
   useEffect(() => {
     const canvas = canvasRef.current as HTMLCanvasElement
@@ -29,16 +42,45 @@ const CurvedCrop: NextPage = () => {
     const ctx = canvas.getContext('2d')
 
     const v = Canvg.fromString(ctx, imageEditor.outerHTML)
-    v.start()
+    v.render().then(() => {
+      if (mountedRef.current) {
+        const link = imageLinkRef.current
+        link.download = 'curvedcrop.png'
+        link.href = canvas.toDataURL('image/png')
 
-    const link = imageLinkRef.current
-    link.download = 'curvedcrop.png'
-    link.href = canvas.toDataURL('image/png')
+        // const outputImage = outputImageRef.current
+        // canvas.toBlob(function (blob) {
+        //   const url = URL.createObjectURL(blob)
+        //   outputImage.src = url
+        // })
+      }
+    })
 
     return () => {
       v.stop()
     }
   })
+
+  useEffect(() => {
+    const image = imageShapeRef.current
+
+    select(image).call(
+      drag()
+        .on('start', function (e) {
+          select(this).attr('fill', 'gray').classed('brightness-110', true)
+        })
+        .on('drag', function (e) {
+          setImagePos(([x, y]) => [x + e.dx, y + e.dy])
+        })
+        .on('end', function (e) {
+          select(this).attr('fill', 'black').classed('brightness-110', false)
+        }),
+    )
+  })
+
+  const handleSidesChange = e => {
+    setSideCount(parseInt(e.target.value))
+  }
 
   const handleDownloadImage = () => {
     if (imageLinkRef.current) {
@@ -67,7 +109,6 @@ const CurvedCrop: NextPage = () => {
             type="file"
             accept="image/*"
             onChange={function (e) {
-              console.log(e.target.files)
               if (e.target.files.length) {
                 setImageFile(e.target.files[0])
               }
@@ -141,9 +182,11 @@ const CurvedCrop: NextPage = () => {
           ref={imageEditorRef}
         >
           <image
+            className="cursor-grab"
+            ref={imageShapeRef}
             href={imgSrc}
-            x="0"
-            y="0"
+            x={imageX}
+            y={imageY}
             width={svgSide}
             height={svgSide}
             clipPath={`url(#${clipPathId})`}
@@ -158,6 +201,7 @@ const CurvedCrop: NextPage = () => {
         </svg>
         <button onClick={handleDownloadImage}>Download image</button>
         <canvas className="hidden" ref={canvasRef}></canvas>
+        {/* <img height="400" width="400" alt="output image" ref={outputImageRef} /> */}
         <a className="hidden" ref={imageLinkRef}></a>
       </main>
     </div>
