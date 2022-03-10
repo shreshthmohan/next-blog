@@ -17,6 +17,8 @@ const CurvedCrop: NextPage = () => {
   const [rotate, setRotate] = useState(0)
   const [imageFile, setImageFile] = useState(null)
   const [imagePos, setImagePos] = useState([0, 0])
+  const [maskOff, setMaskOff] = useState(false)
+  const [download, setDownload] = useState(false)
 
   const [imageX, imageY] = imagePos
 
@@ -47,6 +49,12 @@ const CurvedCrop: NextPage = () => {
         const link = imageLinkRef.current
         link.download = 'curvedcrop.png'
         link.href = canvas.toDataURL('image/png')
+
+        if (download && maskOff) {
+          imageLinkRef.current.click()
+          setDownload(false)
+          setMaskOff(false)
+        }
 
         // const outputImage = outputImageRef.current
         // canvas.toBlob(function (blob) {
@@ -83,9 +91,8 @@ const CurvedCrop: NextPage = () => {
   }
 
   const handleDownloadImage = () => {
-    if (imageLinkRef.current) {
-      imageLinkRef.current.click()
-    }
+    setMaskOff(true)
+    setDownload(true)
   }
 
   const shapeCenter = { cx: svgSide / 2 + cxOffset, cy: svgSide / 2 + cyOffset }
@@ -189,16 +196,36 @@ const CurvedCrop: NextPage = () => {
             y={imageY}
             width={svgSide}
             height={svgSide}
-            clipPath={`url(#${clipPathId})`}
+            clipPath={maskOff ? `url(#${clipPathId})` : undefined}
+            mask={maskOff ? undefined : 'url(#tw-mask)'}
           ></image>
-          <clipPath id={clipPathId}>
-            <path
-              d={dForPath}
-              transform={`rotate(${rotate})`}
-              transform-origin={`${shapeCenter.cx} ${shapeCenter.cy}`}
-            />
+          {maskOff && (
+            <clipPath id={clipPathId}>
+              <path
+                d={dForPath}
+                transform={`rotate(${rotate})`}
+                transform-origin={`${shapeCenter.cx} ${shapeCenter.cy}`}
+              />
+            </clipPath>
+          )}
+          {!maskOff && (
+            <mask id="tw-mask">
+              <rect x="0" y="0" width="400" height="400" fill="#333"></rect>
+              <circle cx="200" cy="200" r="200" fill="#555"></circle>
+              <path
+                fill="#fff"
+                d={dForPath}
+                transform={`rotate(${rotate})`}
+                transform-origin={`${shapeCenter.cx} ${shapeCenter.cy}`}
+                clipPath="url(#for-mask)"
+              />
+            </mask>
+          )}
+          <clipPath id="for-mask">
+            <circle cx="200" cy="200" r="200"></circle>
           </clipPath>
         </svg>
+
         <button onClick={handleDownloadImage}>Download image</button>
         <canvas className="hidden" ref={canvasRef}></canvas>
         {/* <img height="400" width="400" alt="output image" ref={outputImageRef} /> */}
