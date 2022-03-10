@@ -2,11 +2,14 @@ import { NextPage } from 'next'
 import { roundedPolygonByCircumRadius } from 'curved-polygon'
 import React, { useState, useRef, useEffect } from 'react'
 import { Canvg } from 'canvg'
-import { select, drag } from 'd3'
+import { select, drag, zoom } from 'd3'
 
 const svgSide = 400
 const defaultImage = '/images/egg.jpg'
 const sideCountLimits = { min: 3, max: 10 }
+const circumRadiusLimits = { min: 1, max: 500 }
+const rotateLimits = { min: 0, max: 360 }
+const borderRadiusLimits = { min: 0, max: 500 }
 
 const CurvedCrop: NextPage = () => {
   const [sideCount, setSideCount] = useState(6)
@@ -19,6 +22,7 @@ const CurvedCrop: NextPage = () => {
   const [imagePos, setImagePos] = useState([0, 0])
   const [maskOff, setMaskOff] = useState(false)
   const [download, setDownload] = useState(false)
+  const [zoomLevel, setZoomLevel] = useState(1)
 
   const [imageX, imageY] = imagePos
 
@@ -84,6 +88,16 @@ const CurvedCrop: NextPage = () => {
           select(this).attr('fill', 'black').classed('brightness-110', false)
         }),
     )
+
+    select(image).call(
+      zoom()
+        .scaleExtent([0.01, 50])
+        .on('zoom', ({ transform }) => {
+          const { x, y, k } = transform
+          setZoomLevel(k)
+          setImagePos([x, y])
+        }),
+    )
   }, []) // no need to attach drag listeners everytime something changes
 
   const handleSidesChange = e => {
@@ -112,6 +126,23 @@ const CurvedCrop: NextPage = () => {
     <div className="flex font-sans">
       <main className="mx-auto my-32 flex flex-col ">
         <div className="mb-6 flex w-[400px] flex-wrap gap-x-3 gap-y-2 text-sm">
+          <button
+            className="h-6"
+            onClick={() => {
+              setZoomLevel(1)
+              setImagePos([0, 0])
+            }}
+          >
+            Reset image zoom and position
+          </button>
+          {/* <button
+            className="h-6"
+            onClick={() => {
+              setImagePos([0, 0])
+            }}
+          >
+            Reset image position
+          </button> */}
           <input
             type="file"
             accept="image/*"
@@ -136,11 +167,12 @@ const CurvedCrop: NextPage = () => {
           <label>
             Circumradius
             <input
-              className="w-10"
-              type="number"
+              type="range"
               value={circumRadius}
+              {...circumRadiusLimits}
               onChange={e => setCircumRadius(parseInt(e.target.value))}
             />
+            {circumRadius}
           </label>
           <label>
             x offset
@@ -163,20 +195,23 @@ const CurvedCrop: NextPage = () => {
           <label>
             border radius
             <input
-              className="w-10"
-              type="number"
+              className="w-full"
+              type="range"
               value={borderRadius}
+              {...borderRadiusLimits}
               onChange={e => setBorderRadius(parseInt(e.target.value))}
             />
+            {borderRadius}
           </label>
           <label>
             rotate
             <input
-              className="w-10"
-              type="number"
+              type="range"
               value={rotate}
+              {...rotateLimits}
               onChange={e => setRotate(parseInt(e.target.value))}
             />
+            {`${rotate}°`}
           </label>
         </div>
 
@@ -185,7 +220,7 @@ const CurvedCrop: NextPage = () => {
           width={svgSide}
           height={svgSide}
           viewBox={`0 0 ${svgSide} ${svgSide}`}
-          className="border border-solid border-gray-300 bg-gray-100"
+          className="border border-solid border-gray-300 bg-gray-900"
           ref={imageEditorRef}
         >
           <image
@@ -194,8 +229,8 @@ const CurvedCrop: NextPage = () => {
             href={imgSrc}
             x={imageX}
             y={imageY}
-            width={svgSide}
-            height={svgSide}
+            width={svgSide * zoomLevel}
+            height={svgSide * zoomLevel}
             clipPath={maskOff ? `url(#${clipPathId})` : undefined}
             mask={maskOff ? undefined : 'url(#tw-mask)'}
           ></image>
@@ -226,7 +261,9 @@ const CurvedCrop: NextPage = () => {
           </clipPath>
         </svg>
 
-        <button onClick={handleDownloadImage}>Download image</button>
+        <button className="mt-3 py-2" onClick={handleDownloadImage}>
+          Download image
+        </button>
         <canvas className="hidden" ref={canvasRef}></canvas>
         {/* <img height="400" width="400" alt="output image" ref={outputImageRef} /> */}
         <a className="hidden" ref={imageLinkRef}></a>
