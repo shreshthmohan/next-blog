@@ -111,7 +111,7 @@ const CurvedCrop: NextPage = () => {
   return (
     <div className="flex font-sans">
       <main className="mx-auto my-32 flex flex-col ">
-        <div className="mb-6 flex w-[400px] flex-wrap gap-x-3 text-sm">
+        <div className="mb-6 flex w-[400px] flex-wrap gap-x-3 gap-y-2 text-sm">
           <input
             type="file"
             accept="image/*"
