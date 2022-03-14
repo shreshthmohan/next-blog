@@ -7,7 +7,7 @@ import { select, drag, zoom } from 'd3'
 const svgSide = 400
 const defaultImage = '/images/egg.jpg'
 const sideCountLimits = { min: 3, max: 10 }
-const circumRadiusLimits = { min: 1, max: 500 }
+const circumRadiusLimits = { min: 0, max: 500 }
 const rotateLimits = { min: 0, max: 360 }
 const borderRadiusLimits = { min: 0, max: 500 }
 
@@ -124,7 +124,7 @@ const CurvedCrop: NextPage = () => {
 
   return (
     <div className="flex font-sans">
-      <main className="mx-auto my-32 flex flex-col ">
+      <main className="mx-auto my-8 flex flex-col">
         <div className="mb-6 flex w-[400px] flex-wrap gap-x-3 gap-y-2 text-sm">
           <button
             className="h-6"
@@ -170,7 +170,7 @@ const CurvedCrop: NextPage = () => {
               type="range"
               value={circumRadius}
               {...circumRadiusLimits}
-              onChange={e => setCircumRadius(parseInt(e.target.value))}
+              onChange={e => setCircumRadius(parseInt(e.target.value || '0'))}
             />
             {circumRadius}
           </label>
@@ -180,7 +180,7 @@ const CurvedCrop: NextPage = () => {
               className="w-10"
               type="number"
               value={cxOffset}
-              onChange={e => setCxOffset(parseInt(e.target.value))}
+              onChange={e => setCxOffset(parseInt(e.target.value || '0'))}
             />
           </label>
           <label>
@@ -189,7 +189,7 @@ const CurvedCrop: NextPage = () => {
               className="w-10"
               type="number"
               value={cyOffset}
-              onChange={e => setCyOffset(parseInt(e.target.value))}
+              onChange={e => setCyOffset(parseInt(e.target.value || '0'))}
             />
           </label>
           <label>
@@ -199,7 +199,7 @@ const CurvedCrop: NextPage = () => {
               type="range"
               value={borderRadius}
               {...borderRadiusLimits}
-              onChange={e => setBorderRadius(parseInt(e.target.value))}
+              onChange={e => setBorderRadius(parseInt(e.target.value || '0'))}
             />
             {borderRadius}
           </label>
@@ -209,7 +209,7 @@ const CurvedCrop: NextPage = () => {
               type="range"
               value={rotate}
               {...rotateLimits}
-              onChange={e => setRotate(parseInt(e.target.value))}
+              onChange={e => setRotate(parseInt(e.target.value || '0'))}
             />
             {`${rotate}°`}
           </label>
@@ -257,7 +257,13 @@ const CurvedCrop: NextPage = () => {
             </mask>
           )}
           <clipPath id="for-mask">
-            <circle cx="200" cy="200" r="200"></circle>
+            <circle
+              cx="200"
+              cy="200"
+              r="200"
+              transform-origin={`${shapeCenter.cx} ${shapeCenter.cy}`}
+              transform={`rotate(${-rotate})`}
+            ></circle>
           </clipPath>
         </svg>
 
