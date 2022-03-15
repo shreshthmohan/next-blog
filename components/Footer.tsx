@@ -1,7 +1,12 @@
-export default function Footer({ children }) {
+export default function Footer({
+  children,
+  maxWidthClassName = 'max-w-prose',
+}) {
   return (
-    <footer className="py-6 border-t border-x-0 border-b-0 border-solid border-gray-300">
-      <div className="max-w-prose mx-auto text-center">{children}</div>
+    <footer className="border-x-0 border-t border-b-0 border-solid border-gray-300 py-6">
+      <div className={`${maxWidthClassName} mx-auto text-center`}>
+        {children}
+      </div>
     </footer>
   )
 }
