@@ -1,9 +1,11 @@
+import grayMatter from 'gray-matter'
 import fetch from 'node-fetch'
 import parse from 'parse-link-header'
-// import slugify from 'slugify'
+import slugify from 'slugify'
+
 const GH_USER_REPO = 'shreshthmohan/next-blog'
 
-const publishedTags = ['Draft']
+const publishedTags = ['Published']
 let allBlogposts = []
 // let etag = null // todo - implmement etag header
 
@@ -17,7 +19,7 @@ export async function listBlogposts() {
   do {
     const res = await fetch(
       next ??
-        `https://api.github.com/repos/${GH_USER_REPO}/issues?state=all&per_page=100`,
+        `https://api.github.com/repos/${GH_USER_REPO}/issues?state=all&per_page=100&labels=Draft`,
       {
         headers: authheader,
       },
@@ -29,9 +31,11 @@ export async function listBlogposts() {
         res.status + ' ' + res.statusText + '\n' + (issues && issues.message),
       )
     issues.forEach(issue => {
-      if (issue.labels.some(label => publishedTags.includes(label.name))) {
-        allBlogposts.push(issue)
+      // if (issue.labels.some(label => publishedTags.includes(label.name))) {
+      if (issue.body) {
+        allBlogposts.push(parseIssue(issue))
       }
+      // }
     })
     const headers = parse(res.headers.get('Link'))
     next = headers && headers.next
@@ -47,13 +51,16 @@ export async function getBlogpost(slug) {
   // find the blogpost that matches this slug
   const blogpost = allBlogposts.find(post => post.slug === slug)
   // compile it with mdsvex
-  const content = (await compile(blogpost.content, {})).code
+  // const content = (await compile(blogpost.content, {})).code
 
-  return { ...blogpost, content }
+  return blogpost
 }
 
 function parseIssue(issue) {
   const src = issue.body
+  if (!src) {
+    console.log('typeof src', typeof src, src, issue)
+  }
   const data = grayMatter(src)
   let slug
   if (data.data.slug) {
@@ -77,3 +84,4 @@ function parseIssue(issue) {
     },
   }
 }
+52
