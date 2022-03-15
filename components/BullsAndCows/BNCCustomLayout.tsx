@@ -9,7 +9,7 @@ export default function BNCCustomLayout({ children, ...restProps }) {
   const meta = { ...defaultMeta, ...restProps }
   return (
     <div className="min-h-full bg-lime-50   font-sans ">
-      <div className="px-4 pt-6 pb-16 sm:px-6 lg:px-8 ">
+      <main className="px-4 pt-6 pb-16 sm:px-6 lg:px-8 ">
         <div className="text-right text-sm">
           <a
             target="_blank"
@@ -34,7 +34,7 @@ export default function BNCCustomLayout({ children, ...restProps }) {
           Bulls and Cows
         </h1>
         <div className="mx-auto w-[20rem] text-center">{children}</div>
-      </div>
+      </main>
     </div>
   )
 }
