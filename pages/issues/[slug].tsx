@@ -1,5 +1,4 @@
 import BaseReadingLayout from 'layouts/BaseReadingLayout'
-import fetch from 'node-fetch'
 
 import { getBlogpost, listBlogposts } from 'utils/fetchIssues'
 

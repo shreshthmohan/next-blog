@@ -1,3 +1,6 @@
+// Almost completely copied from:
+// https://github.com/sw-yx/swyxkit/blob/3a309d95275ae32bd311d71838ca36858b222eb6/src/lib/content.js
+
 import grayMatter from 'gray-matter'
 import fetch from 'node-fetch'
 import parse from 'parse-link-header'
