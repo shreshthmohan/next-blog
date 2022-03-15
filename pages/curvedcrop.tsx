@@ -130,19 +130,18 @@ const CurvedCrop: NextPage = () => {
             className="h-6"
             onClick={() => {
               setZoomLevel(1)
-              setImagePos([0, 0])
             }}
           >
-            Reset image zoom and position
+            Reset image zoom
           </button>
-          {/* <button
+          <button
             className="h-6"
             onClick={() => {
               setImagePos([0, 0])
             }}
           >
             Reset image position
-          </button> */}
+          </button>
           <input
             type="file"
             accept="image/*"
@@ -175,19 +174,17 @@ const CurvedCrop: NextPage = () => {
             {circumRadius}
           </label>
           <label>
-            x offset
+            Crop X offset
             <input
-              className="w-10"
-              type="number"
+              type="range"
               value={cxOffset}
               onChange={e => setCxOffset(parseInt(e.target.value || '0'))}
             />
           </label>
           <label>
-            y offset
+            Crop Y offset
             <input
-              className="w-10"
-              type="number"
+              type="range"
               value={cyOffset}
               onChange={e => setCyOffset(parseInt(e.target.value || '0'))}
             />
@@ -195,7 +192,6 @@ const CurvedCrop: NextPage = () => {
           <label>
             border radius
             <input
-              className="w-full"
               type="range"
               value={borderRadius}
               {...borderRadiusLimits}
