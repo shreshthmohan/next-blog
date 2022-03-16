@@ -25,7 +25,7 @@ export async function getStaticPaths() {
 
   return {
     paths: allIssues.map(i => ({ params: { slug: i.slug } })),
-    fallback: true,
+    fallback: false,
   }
 }
 
