@@ -10,8 +10,8 @@ function NavLink({ href, text }) {
   return (
     <Link href={href}>
       <a
-        className={`${isActive ? 'text-gray-600 ' : 'text-gray-400 '}
-           mr-2 text-xl font-normal no-underline decoration-gray-500 underline-offset-2 hover:text-gray-500 hover:underline`}
+        className={`${isActive ? 'text-gray-800 ' : 'text-gray-400 '}
+           mr-4 text-xl font-normal no-underline decoration-gray-500 underline-offset-2 hover:text-gray-500 hover:underline`}
       >
         {text}
       </a>
@@ -19,14 +19,19 @@ function NavLink({ href, text }) {
   )
 }
 
-export default function BaseReadingLayout(props) {
-  const { children, ...meta } = props
+export default function BaseReadingLayout({
+  children,
+  maxWidthClassName = 'max-w-prose',
+  ...meta
+}) {
+  // const { children, ...meta } = props
+  // const { maxWidthClassName = 'max-w-prose' } = props
 
   return (
-    <div className="h-full font-serif ">
+    <div className="h-full font-serif">
       <MetaHead {...meta} />
       <div className="flex min-h-full flex-col justify-between">
-        <div className="mx-auto max-w-prose pt-10">
+        <div className={`mx-auto ${maxWidthClassName} px-3 pt-4 sm:pt-6`}>
           <header className="relative">
             <a className="skip-to-content" href="#main-content">
               Skip navigation
@@ -35,6 +40,7 @@ export default function BaseReadingLayout(props) {
               <span>
                 {/* TODO test a11y */}
                 <NavLink href="/" text="Home" />
+                <NavLink href="/blog" text="Blog" />
                 <NavLink href="/about" text="About + Now" />
                 {/* blog */}
                 {/* projects */}
@@ -48,7 +54,7 @@ export default function BaseReadingLayout(props) {
             {children}
           </main>
         </div>
-        <Footer>
+        <Footer maxWidthClassName={maxWidthClassName}>
           <span>
             Twitter:
             <a
