@@ -1,5 +1,10 @@
-// Almost completely copied from:
-// https://github.com/sw-yx/swyxkit/blob/3a309d95275ae32bd311d71838ca36858b222eb6/src/lib/content.js
+import rehypeAutolinkHeadings from 'rehype-autolink-headings'
+import rehypeCodeTitles from 'rehype-code-titles'
+import rehypePrism from 'rehype-prism-plus'
+import rehypeSlug from 'rehype-slug'
+import remarkGfm from 'remark-gfm'
+
+import { serialize } from 'next-mdx-remote/serialize'
 
 import grayMatter from 'gray-matter'
 import fetch from 'node-fetch'
@@ -42,28 +47,49 @@ export async function listBlogposts() {
     })
     const headers = parse(res.headers.get('Link'))
     next = headers && headers.next
+    console.log('next:', next)
   } while (next && limit++ < 1000) // just a failsafe against infinite loop - feel free to remove
   return allBlogposts
 }
 
 export async function getBlogpost(slug) {
   // get all blogposts if not already done - or in development
-  if (process.env.NODE_ENV !== 'production' ?? allBlogposts.length === 0) {
-    allBlogposts = await listBlogposts()
-  }
+  // if (process.env.NODE_ENV !== 'production' ?? allBlogposts.length === 0) {
+  allBlogposts = await listBlogposts()
+  // }
   // find the blogpost that matches this slug
   const blogpost = allBlogposts.find(post => post.slug === slug)
   // compile it with mdsvex
-  // const content = (await compile(blogpost.content, {})).code
+  const content = await serialize(blogpost.content, {
+    mdxOptions: {
+      remarkPlugins: [remarkGfm],
+      rehypePlugins: [
+        rehypeSlug,
+        rehypeCodeTitles,
+        rehypePrism,
+        [
+          rehypeAutolinkHeadings,
+          {
+            // https://github.com/rehypejs/rehype-autolink-headings#optionsproperties
+            properties: {
+              className: ['intra-page-link'],
+              ariaHidden: true,
+            },
+          },
+        ],
+      ],
+    },
+  })
 
-  return blogpost
+  return { ...blogpost, content }
+  // return blogpost
 }
 
 function parseIssue(issue) {
   const src = issue.body
-  if (!src) {
-    console.log('typeof src', typeof src, src, issue)
-  }
+  // if (!src) {
+  //   console.log('typeof src', typeof src, src, issue)
+  // }
   const data = grayMatter(src)
   let slug
   if (data.data.slug) {

@@ -1,10 +1,11 @@
 import BaseReadingLayout from 'layouts/BaseReadingLayout'
+import { MDXRemote } from 'next-mdx-remote'
 
 import { getBlogpost, listBlogposts } from 'utils/fetchIssues'
 
-const GH_USER_REPO = 'shreshthmohan/next-blog'
+// const GH_USER_REPO = 'shreshthmohan/next-blog'
 
-export default function Issue(props) {
+export default function Issue({ content }) {
   return (
     <BaseReadingLayout
       title="placeholder title"
@@ -13,7 +14,8 @@ export default function Issue(props) {
       type="article"
     >
       <h1>Issue</h1>
-      {JSON.stringify(props)}
+      {/* {JSON.stringify(content)} */}
+      <MDXRemote {...content} />
     </BaseReadingLayout>
   )
 }
@@ -23,7 +25,7 @@ export async function getStaticPaths() {
 
   return {
     paths: allIssues.map(i => ({ params: { slug: i.slug } })),
-    fallback: false,
+    fallback: true,
   }
 }
 
