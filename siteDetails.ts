@@ -1,7 +1,9 @@
+const schemeRegex = /^http(?:s)?:\/\//
+const siteUrl = process.env.NEXT_PUBLIC_VERCEL_URL || process.env.VERCEL_URL
+
 export const siteWide = {
-  // siteRoot: 'https://shreshth.dev',
-  siteRoot:
-    'https://' + (process.env.NEXT_PUBLIC_VERCEL_URL || process.env.VERCEL_URL),
+  // prepend scheme [https://] if not present in the environment variable
+  siteRoot: schemeRegex.test(siteUrl) ? siteUrl : `https://${siteUrl}`,
   siteName: 'Shreshth Mohan',
   twitterHandle: '@shreshthmohan',
   type: 'website',
