@@ -1,3 +1,5 @@
+// Quite a bit if the code here is copied from
+// https://github.com/sw-yx/swyxkit/commit/3a309d95275ae32bd311d71838ca36858b222eb6#diff-e52d7cbb53c2deb88bfe15cfc210a387853cf9f243172b6e2844bb88bc9743a3
 import rehypeAutolinkHeadings from 'rehype-autolink-headings'
 import rehypeCodeTitles from 'rehype-code-titles'
 import rehypePrism from 'rehype-prism-plus'
@@ -39,28 +41,19 @@ export async function listBlogposts() {
         res.status + ' ' + res.statusText + '\n' + (issues && issues.message),
       )
     issues.forEach(issue => {
-      // if (issue.labels.some(label => publishedTags.includes(label.name))) {
-      if (issue.body) {
-        allBlogposts.push(parseIssue(issue))
-      }
-      // }
+      allBlogposts.push(parseIssue(issue))
     })
     const headers = parse(res.headers.get('Link'))
     next = headers && headers.next
-    console.log('next:', next)
   } while (next && limit++ < 1000) // just a failsafe against infinite loop - feel free to remove
   return allBlogposts
 }
 
 export async function getBlogpost(slug) {
-  // get all blogposts if not already done - or in development
-  // if (process.env.NODE_ENV !== 'production' ?? allBlogposts.length === 0) {
   allBlogposts = await listBlogposts()
-  // }
   // find the blogpost that matches this slug
   const blogpost = allBlogposts.find(post => post.slug === slug)
-  // compile it with mdsvex
-  const content = await serialize(blogpost.content, {
+  const content = await serialize(blogpost.content ?? 'No content', {
     mdxOptions: {
       remarkPlugins: [remarkGfm],
       rehypePlugins: [
@@ -82,15 +75,12 @@ export async function getBlogpost(slug) {
   })
 
   return { ...blogpost, content }
-  // return blogpost
 }
 
 function parseIssue(issue) {
   const src = issue.body
-  // if (!src) {
-  //   console.log('typeof src', typeof src, src, issue)
-  // }
-  const data = grayMatter(src)
+
+  const data = grayMatter(src ?? 'No content')
   let slug
   if (data.data.slug) {
     slug = data.data.slug
@@ -101,16 +91,15 @@ function parseIssue(issue) {
   }
   return {
     content: data.content,
-    data: data.data,
     slug: slug.toLowerCase(),
-    ghMetadata: {
+    metaData: {
       issueUrl: issue.html_url,
-      commentsUrl: issue.comments_url,
       title: issue.title,
       created_at: issue.created_at,
       updated_at: issue.updated_at,
-      reactions: issue.reactions,
+      ...data.data,
+      // commentsUrl: issue.comments_url,
+      // reactions: issue.reactions,
     },
   }
 }
-52

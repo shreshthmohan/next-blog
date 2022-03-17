@@ -1,21 +1,30 @@
-import BaseReadingLayout from 'layouts/BaseReadingLayout'
 import { MDXRemote } from 'next-mdx-remote'
-
+import BaseReadingLayout from 'layouts/BaseReadingLayout'
 import { getBlogpost, listBlogposts } from 'utils/fetchIssues'
+import { siteWide } from 'siteDetails'
 
-// const GH_USER_REPO = 'shreshthmohan/next-blog'
+const { siteName } = siteWide
 
-export default function Issue({ content }) {
+export default function Issue({ content, metaData }) {
+  const { title, summary, updated_at, created_at } = metaData
   return (
     <BaseReadingLayout
-      title="placeholder title"
-      description="descr"
-      date="{post.date}"
+      title={`${title} – ${siteName}`}
+      description={summary}
+      date={updated_at || created_at}
       type="article"
     >
-      <h1>Issue</h1>
-      {/* {JSON.stringify(content)} */}
-      <MDXRemote {...content} />
+      <article className="mx-auto mb-16 flex w-full max-w-2xl flex-col items-start justify-center">
+        <header className="mb-4 w-full border-0 border-b-2 border-solid border-gray-200">
+          <h1 className="mb-1 text-3xl tracking-tight text-gray-700  md:text-5xl">
+            {title}
+          </h1>
+          <p className="mt-0 mb-1  text-xl text-gray-700">{summary}</p>
+        </header>
+        <div className="article-body mt-4 w-full max-w-none">
+          <MDXRemote {...content} />
+        </div>
+      </article>
     </BaseReadingLayout>
   )
 }
