@@ -14,16 +14,7 @@
   }
 
   main {
-    @apply text-xl;
-  }
-  h1 {
-    @apply text-4xl font-normal text-gray-900;
-  }
-  h2 {
-    @apply relative text-3xl font-normal;
-  }
-  p {
-    @apply leading-relaxed;
+    @apply text-lg;
   }
 }
 
