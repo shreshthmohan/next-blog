@@ -1,47 +1,45 @@
-import BlogLayout from 'layouts/BlogLayout'
+import { MDXRemote } from 'next-mdx-remote'
 import BaseReadingLayout from 'layouts/BaseReadingLayout'
-import { useMDXComponent } from 'next-contentlayer/hooks'
-
-import { allPosts } from 'contentlayer/generated'
-import type { Post } from 'contentlayer/generated'
+import { getBlogpost, listBlogposts } from 'utils/fetchIssues'
 import { siteWide } from 'siteDetails'
 
 const { siteName } = siteWide
 
-export default function Post({ post }: { post: Post }) {
-  const Component = useMDXComponent(post.body.code)
-
+export default function Issue({ content, metaData }) {
+  const { title, summary, updated_at, created_at } = metaData
   return (
     <BaseReadingLayout
-      title={`${post.title} – ${siteName}`}
-      description={post.summary}
-      date={post.date}
+      title={`${title} – ${siteName}`}
+      description={summary}
+      date={updated_at || created_at}
       type="article"
     >
       <article className="mx-auto mb-16 flex w-full max-w-2xl flex-col items-start justify-center">
-        <h1 className="mx-auto mb-4 text-center text-3xl tracking-tight text-black md:text-5xl ">
-          {post.title}
-        </h1>
-        <div className="mt-2 flex w-full flex-col items-start justify-between md:flex-row md:items-center"></div>
+        <header className="mb-4 w-full border-0 border-b-2 border-solid border-gray-200">
+          <h1 className="mb-1 text-3xl font-normal tracking-tight  text-gray-700 md:text-4xl">
+            {title}
+          </h1>
+          <p className="mt-0 mb-1 text-xl text-gray-700">{summary}</p>
+        </header>
         <div className="article-body mt-4 w-full max-w-none">
-          <Component />
+          <MDXRemote {...content} />
         </div>
-
-        <div className=""></div>
       </article>
     </BaseReadingLayout>
   )
 }
 
 export async function getStaticPaths() {
+  const allIssues = await listBlogposts()
+
   return {
-    paths: allPosts.map(p => ({ params: { slug: p.slug } })),
+    paths: allIssues.map(i => ({ params: { slug: i.slug } })),
     fallback: false,
   }
 }
 
 export async function getStaticProps({ params }) {
-  const post = allPosts.find(post => post.slug === params.slug)
+  const issue = await getBlogpost(params.slug)
 
-  return { props: { post } }
+  return { props: { ...issue } }
 }
