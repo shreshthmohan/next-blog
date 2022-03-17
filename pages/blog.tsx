@@ -10,7 +10,7 @@ const IssueList: NextPage<{ issueList: string[] }> = props => {
       <ul>
         {props.issueList.map(issueSlug => (
           <li key={issueSlug}>
-            <Link href={`issues/${issueSlug}`}>
+            <Link href={`blog/${issueSlug}`}>
               <a>{issueSlug}</a>
             </Link>
           </li>
