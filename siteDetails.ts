@@ -1,6 +1,7 @@
 export const siteWide = {
   // siteRoot: 'https://shreshth.dev',
-  siteRoot: process.env.NEXT_PUBLIC_VERCEL_URL || process.env.VERCEL_URL,
+  siteRoot:
+    'https://' + (process.env.NEXT_PUBLIC_VERCEL_URL || process.env.VERCEL_URL),
   siteName: 'Shreshth Mohan',
   twitterHandle: '@shreshthmohan',
   type: 'website',
