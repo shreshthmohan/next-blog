@@ -2,7 +2,9 @@ import { NextPage } from 'next'
 import { roundedPolygonByCircumRadius } from 'curved-polygon'
 import React, { useState, useRef, useEffect } from 'react'
 import { Canvg } from 'canvg'
-import { select, drag, zoom } from 'd3'
+import { select } from 'd3-selection'
+import { drag } from 'd3-drag'
+import { zoom } from 'd3-zoom'
 
 const svgSide = 400
 const defaultImage = '/images/egg.jpg'
