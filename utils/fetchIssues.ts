@@ -13,14 +13,23 @@ import fetch from 'node-fetch'
 import parse from 'parse-link-header'
 import slugify from 'slugify'
 
-const GH_USER_REPO = 'shreshthmohan/next-blog'
+import { siteWide } from 'siteDetails'
 
-const publishedTags = ['Published']
-let allBlogposts = []
+const GH_USER_REPO = siteWide.githubUserRepo
+
+type Issue = {
+  body: string
+  title: string
+  html_url: string
+  created_at: string
+  updated_at: string
+}
+
+// const publishedTag =
 // let etag = null // todo - implmement etag header
 
 export async function listBlogposts() {
-  allBlogposts = [] // reset to zero - make sure to handle this better when doing etags or cache restore
+  let allBlogposts = [] // reset to zero - make sure to handle this better when doing etags or cache restore
   let next = null
   let limit = 0 // just a failsafe against infinite loop - feel free to remove
   const authheader = process.env.GH_TOKEN && {
@@ -35,11 +44,14 @@ export async function listBlogposts() {
       },
     )
 
-    const issues = await res.json()
-    if (res.status > 400)
+    const result = await res.json()
+    if (res.status > 400) {
+      const err = result as { message?: string }
       throw new Error(
-        res.status + ' ' + res.statusText + '\n' + (issues && issues.message),
+        res.status + ' ' + res.statusText + '\n' + err && err.message,
       )
+    }
+    const issues = result as Issue[]
     issues.forEach(issue => {
       allBlogposts.push(parseIssue(issue))
     })
@@ -49,8 +61,8 @@ export async function listBlogposts() {
   return allBlogposts
 }
 
-export async function getBlogpost(slug) {
-  allBlogposts = await listBlogposts()
+export async function getBlogpost(slug: string) {
+  const allBlogposts = await listBlogposts()
   // find the blogpost that matches this slug
   const blogpost = allBlogposts.find(post => post.slug === slug)
   const content = await serialize(blogpost.content ?? 'No content', {
@@ -77,11 +89,11 @@ export async function getBlogpost(slug) {
   return { ...blogpost, content }
 }
 
-function parseIssue(issue) {
+function parseIssue(issue: Issue) {
   const src = issue.body
 
   const data = grayMatter(src ?? 'No content')
-  let slug
+  let slug: string
   if (data.data.slug) {
     slug = data.data.slug
   } else if (data.data.title) {

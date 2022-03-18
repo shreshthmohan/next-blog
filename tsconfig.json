@@ -24,7 +24,7 @@
     "**/*.ts",
     "**/*.tsx",
     ".contentlayer/generated",
-    "utils/fetchIssues.js"
+    "utils/fetchIssues.ts"
   ],
   "exclude": ["node_modules"]
 }
