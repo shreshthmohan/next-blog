@@ -23,7 +23,8 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    ".contentlayer/generated"
+    ".contentlayer/generated",
+    "utils/fetchIssues.ts"
   ],
   "exclude": ["node_modules"]
 }
