@@ -18,6 +18,23 @@
   }
 }
 
+.article-body h2 {
+  @apply font-normal text-gray-800;
+}
+
+.article-body h3,
+.article-body h4,
+.article-body h5,
+.article-body h6 {
+  @apply font-normal;
+}
+
+.article-body .contains-task-list li {
+  @apply list-none;
+}
+
+/* start - styling for auto-link headings */
+
 .article-body .intra-page-link {
   @apply absolute no-underline;
 
@@ -39,6 +56,8 @@
 .article-body *:hover > .intra-page-link:after {
   @apply text-gray-500;
 }
+
+/* end - styling for auto-link headings */
 
 .skip-to-content {
   @apply absolute -left-1/4 -top-8  -translate-y-12 transform px-4 py-3 focus:top-0 focus:translate-y-0;

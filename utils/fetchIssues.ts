@@ -23,6 +23,7 @@ type Issue = {
   html_url: string
   created_at: string
   updated_at: string
+  id: number
 }
 
 // const publishedTag =
@@ -97,9 +98,9 @@ function parseIssue(issue: Issue) {
   if (data.data.slug) {
     slug = data.data.slug
   } else if (data.data.title) {
-    slug = slugify(data.data.title)
+    slug = slugify(data.data.title, { remove: /[*+~.()'"!:@]/g })
   } else {
-    slug = slugify(issue.title)
+    slug = slugify(issue.title, { remove: /[*+~.()'"!:@]/g })
   }
   return {
     content: data.content,
@@ -110,6 +111,7 @@ function parseIssue(issue: Issue) {
       created_at: issue.created_at,
       updated_at: issue.updated_at,
       ...data.data,
+      id: issue.id,
       // commentsUrl: issue.comments_url,
       // reactions: issue.reactions,
     },

@@ -24,14 +24,13 @@ export default function BaseReadingLayout({
   maxWidthClassName = 'max-w-prose',
   ...meta
 }) {
-  // const { children, ...meta } = props
-  // const { maxWidthClassName = 'max-w-prose' } = props
-
   return (
     <div className="h-full font-serif">
       <MetaHead {...meta} />
       <div className="flex min-h-full flex-col justify-between">
-        <div className={`mx-auto ${maxWidthClassName} px-3 pt-4 sm:pt-6`}>
+        <div
+          className={`mx-auto ${maxWidthClassName} px-3 pt-4 sm:pt-6 md:px-0`}
+        >
           <header className="relative">
             <a className="skip-to-content" href="#main-content">
               Skip navigation
