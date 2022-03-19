@@ -44,16 +44,12 @@
   cursor: pointer;
 }
 
-.article-body .intra-page-link:after {
-  @apply text-gray-200 dark:text-gray-700;
+.intra-page-link:after {
+  @apply text-gray-300;
   content: '#';
 }
 
 .intra-page-link:hover:after {
-  @apply text-gray-500;
-}
-
-.article-body *:hover > .intra-page-link:after {
   @apply text-gray-500;
 }
 
