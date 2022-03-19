@@ -8,10 +8,10 @@ import { zoom } from 'd3-zoom'
 
 const svgSide = 400
 const defaultImage = '/images/egg.jpg'
-const sideCountLimits = { min: 3, max: 10 }
+const sideCountLimits = { min: 3, max: 50 }
 const circumRadiusLimits = { min: 0, max: 500 }
 const rotateLimits = { min: 0, max: 360 }
-const borderRadiusLimits = { min: 0, max: 500 }
+const borderRadiusLimits = { min: 0, max: 1800 }
 
 const CurvedCrop: NextPage = () => {
   const [sideCount, setSideCount] = useState(6)

@@ -28,6 +28,12 @@ const DataVizCard = ({
   </div>
 )
 
+const CroppedImageSample = ({ imgSrc }: { imgSrc: string }) => (
+  <div className="m-1 h-[200px] w-[200px] overflow-hidden rounded-full border-2 border-solid border-gray-400">
+    <Image src={imgSrc} alt="img famous person" width="200" height="200" />
+  </div>
+)
+
 const Home: NextPage = () => {
   return (
     <BaseReadingLayout maxWidthClassName="max-w-screen-md">
@@ -100,47 +106,35 @@ const Home: NextPage = () => {
         </p>
       </div>
 
-      <h2 className="mb-2 text-2xl font-normal text-gray-600">Tiny projects</h2>
-      <Link href="curvedcrop">
-        <a>Cropping tool for Twitter</a>
-      </Link>
-      <p>Some images I cropped using the tool:</p>
-      <div className="flex flex-wrap justify-center rounded-xl border border-solid border-gray-100 bg-gray-200 p-2 shadow">
-        <img
-          className="m-1 h-[200px] w-[200px] rounded-full border-2 border-solid border-gray-100"
-          src="/images/ccdemo/curvedcrop1.png"
-          alt=""
-        />
-        <img
-          className="m-1 h-[200px] w-[200px] rounded-full border-2 border-solid border-gray-100"
-          src="/images/ccdemo/curvedcrop2.png"
-          alt=""
-        />
-        <img
-          className="m-1 h-[200px] w-[200px] rounded-full border-2 border-solid border-gray-100"
-          src="/images/ccdemo/curvedcrop3.png"
-          alt=""
-        />
-        <img
-          className="m-1 h-[200px] w-[200px] rounded-full border-2 border-solid border-gray-100"
-          src="/images/ccdemo/curvedcrop4.png"
-          alt=""
-        />
-        <img
-          className="m-1 h-[200px] w-[200px] rounded-full border-2 border-solid border-gray-100"
-          src="/images/ccdemo/curvedcrop5.png"
-          alt=""
-        />
-        <img
-          className="m-1 h-[200px] w-[200px] rounded-full border-2 border-solid border-gray-100"
-          src="/images/ccdemo/curvedcrop6.png"
-          alt=""
-        />
+      <h2 className="mb-4 pt-12 text-2xl font-normal text-gray-600">
+        Tiny projects
+      </h2>
+      <div className="rounded border border-solid border-gray-300 p-3">
+        <h3 className="m-0 text-xl font-normal">
+          <Link href="curvedcrop">
+            <a>Cropping tool for Twitter</a>
+          </Link>
+        </h3>
+        <p className="m-0 text-base leading-tight text-gray-500">
+          Create polygon-shaped crops, with curved corners and some fun patterns
+          created due to corner cases in my polygon curve code. Some images I
+          cropped using the tool:
+        </p>
+        <div className="mt-2 flex flex-wrap justify-center rounded border border-solid border-gray-100 bg-gray-200 p-2">
+          <CroppedImageSample imgSrc="/images/ccdemo/curvedcrop2.png" />
+          <CroppedImageSample imgSrc="/images/ccdemo/curvedcrop10.png" />
+          <CroppedImageSample imgSrc="/images/ccdemo/curvedcrop6.png" />
+          <CroppedImageSample imgSrc="/images/ccdemo/curvedcrop4.png" />
+          <CroppedImageSample imgSrc="/images/ccdemo/curvedcrop11.png" />
+          <CroppedImageSample imgSrc="/images/ccdemo/curvedcrop5.png" />
+        </div>
       </div>
-      <br />
-      <Link href="bullsandcows">
-        <a>Bulls and Cows: A guessing game</a>
-      </Link>
+
+      <h3 className=" text-xl font-normal">
+        <Link href="bullsandcows">
+          <a>Bulls and Cows: A guessing game</a>
+        </Link>
+      </h3>
       <br />
     </BaseReadingLayout>
   )
