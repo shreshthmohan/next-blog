@@ -104,6 +104,39 @@ const Home: NextPage = () => {
       <Link href="curvedcrop">
         <a>Cropping tool for Twitter</a>
       </Link>
+      <p>Some images I cropped using the tool:</p>
+      <div className="flex flex-wrap justify-center rounded-xl border border-solid border-gray-100 bg-gray-200 p-2 shadow">
+        <img
+          className="m-1 h-[200px] w-[200px] rounded-full border-2 border-solid border-gray-100"
+          src="/images/ccdemo/curvedcrop1.png"
+          alt=""
+        />
+        <img
+          className="m-1 h-[200px] w-[200px] rounded-full border-2 border-solid border-gray-100"
+          src="/images/ccdemo/curvedcrop2.png"
+          alt=""
+        />
+        <img
+          className="m-1 h-[200px] w-[200px] rounded-full border-2 border-solid border-gray-100"
+          src="/images/ccdemo/curvedcrop3.png"
+          alt=""
+        />
+        <img
+          className="m-1 h-[200px] w-[200px] rounded-full border-2 border-solid border-gray-100"
+          src="/images/ccdemo/curvedcrop4.png"
+          alt=""
+        />
+        <img
+          className="m-1 h-[200px] w-[200px] rounded-full border-2 border-solid border-gray-100"
+          src="/images/ccdemo/curvedcrop5.png"
+          alt=""
+        />
+        <img
+          className="m-1 h-[200px] w-[200px] rounded-full border-2 border-solid border-gray-100"
+          src="/images/ccdemo/curvedcrop6.png"
+          alt=""
+        />
+      </div>
       <br />
       <Link href="bullsandcows">
         <a>Bulls and Cows: A guessing game</a>

@@ -25,6 +25,7 @@ const CurvedCrop: NextPage = () => {
   const [maskOff, setMaskOff] = useState(false)
   const [download, setDownload] = useState(false)
   const [zoomLevel, setZoomLevel] = useState(1)
+  const [bgDark, setBgDark] = useState(true)
 
   const [imageX, imageY] = imagePos
 
@@ -144,6 +145,13 @@ const CurvedCrop: NextPage = () => {
           >
             Reset image position
           </button>
+          <button
+            onClick={() => {
+              setBgDark(!bgDark)
+            }}
+          >
+            Toggle SVG Background
+          </button>
           <input
             type="file"
             accept="image/*"
@@ -218,7 +226,9 @@ const CurvedCrop: NextPage = () => {
           width={svgSide}
           height={svgSide}
           viewBox={`0 0 ${svgSide} ${svgSide}`}
-          className="border border-solid border-gray-300 bg-gray-900"
+          className={`border border-solid border-gray-300 ${
+            bgDark ? 'bg-gray-900' : 'bg-gray-50'
+          }`}
           ref={imageEditorRef}
         >
           <image
