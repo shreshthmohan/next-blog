@@ -127,7 +127,7 @@ const CurvedCrop: NextPage = () => {
 
   return (
     <div className="flex font-sans">
-      <main className="mx-auto my-8 flex flex-col">
+      <main className="mx-auto my-8 flex flex-col px-4">
         <h1 className="font-serif font-normal text-gray-600">
           Geometric Cropping Tool for Twitter profile pictures
         </h1>
@@ -138,8 +138,8 @@ const CurvedCrop: NextPage = () => {
         >
           Report Issue
         </a>
-        <div className="flex justify-between">
-          <div>
+        <div className="flex flex-wrap place-content-center ">
+          <div className="mr-2">
             <svg
               id="cropped-image-editor"
               width={svgSide}
@@ -199,30 +199,7 @@ const CurvedCrop: NextPage = () => {
             <a className="hidden" ref={imageLinkRef}></a>
           </div>
 
-          <div className="mb-6 flex w-[400px] flex-wrap gap-x-3 gap-y-2 text-sm">
-            <button
-              className="h-6"
-              onClick={() => {
-                setZoomLevel(1)
-              }}
-            >
-              Reset image zoom
-            </button>
-            <button
-              className="h-6"
-              onClick={() => {
-                setImagePos([0, 0])
-              }}
-            >
-              Reset image position
-            </button>
-            <button
-              onClick={() => {
-                setBgDark(!bgDark)
-              }}
-            >
-              Toggle SVG Background
-            </button>
+          <div className="ml-2 mb-6 flex w-[400px] flex-wrap gap-x-3 gap-y-2 text-sm">
             <input
               type="file"
               accept="image/*"
@@ -232,18 +209,42 @@ const CurvedCrop: NextPage = () => {
                 }
               }}
             />
-
-            <label>
-              Sides
-              <input
-                onChange={handleSidesChange}
-                type="range"
-                step="1"
-                value={sideCount}
-                {...sideCountLimits}
-              />
-              {sideCount}
-            </label>
+            <button
+              onClick={() => {
+                setZoomLevel(1)
+                setImagePos([0, 0])
+              }}
+            >
+              {'Reset image zoom & position'}
+            </button>
+            <button
+              onClick={() => {
+                setBgDark(!bgDark)
+              }}
+              title="toggle canvas background to better see your image's position with respect to the circular crop twitter will apply"
+            >
+              Toggle Background
+            </button>
+            <div className="flex w-full justify-between">
+              <label>Sides</label>
+              <div className="flex w-2/3">
+                <input
+                  className="grow"
+                  onChange={handleSidesChange}
+                  type="range"
+                  step="1"
+                  value={sideCount}
+                  {...sideCountLimits}
+                />
+                <input
+                  type="number"
+                  className="w-10"
+                  name=""
+                  id=""
+                  value={sideCount}
+                />
+              </div>
+            </div>
             <label>
               Circumradius
               <input
