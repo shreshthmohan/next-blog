@@ -4,12 +4,6 @@ import { timeFormat } from 'd3-time-format'
 import { listBlogposts } from 'utils/fetchIssues'
 import BaseReadingLayout from 'layouts/BaseReadingLayout'
 
-const dateFormatOptions: Intl.DateTimeFormatOptions = {
-  year: 'numeric',
-  month: 'long',
-  day: 'numeric',
-}
-
 const IssueList: NextPage<{ issueList: [] }> = props => {
   return (
     <BaseReadingLayout maxWidthClassName="max-w-screen-md">
