@@ -128,159 +128,173 @@ const CurvedCrop: NextPage = () => {
   return (
     <div className="flex font-sans">
       <main className="mx-auto my-8 flex flex-col">
-        <div className="mb-6 flex w-[400px] flex-wrap gap-x-3 gap-y-2 text-sm">
-          <button
-            className="h-6"
-            onClick={() => {
-              setZoomLevel(1)
-            }}
-          >
-            Reset image zoom
-          </button>
-          <button
-            className="h-6"
-            onClick={() => {
-              setImagePos([0, 0])
-            }}
-          >
-            Reset image position
-          </button>
-          <button
-            onClick={() => {
-              setBgDark(!bgDark)
-            }}
-          >
-            Toggle SVG Background
-          </button>
-          <input
-            type="file"
-            accept="image/*"
-            onChange={function (e) {
-              if (e.target.files.length) {
-                setImageFile(e.target.files[0])
-              }
-            }}
-          />
-
-          <label>
-            Sides
-            <input
-              onChange={handleSidesChange}
-              type="range"
-              step="1"
-              value={sideCount}
-              {...sideCountLimits}
-            />
-            {sideCount}
-          </label>
-          <label>
-            Circumradius
-            <input
-              type="range"
-              value={circumRadius}
-              {...circumRadiusLimits}
-              onChange={e => setCircumRadius(parseInt(e.target.value || '0'))}
-            />
-            {circumRadius}
-          </label>
-          <label>
-            Crop X offset
-            <input
-              type="range"
-              value={cxOffset}
-              onChange={e => setCxOffset(parseInt(e.target.value || '0'))}
-            />
-          </label>
-          <label>
-            Crop Y offset
-            <input
-              type="range"
-              value={cyOffset}
-              onChange={e => setCyOffset(parseInt(e.target.value || '0'))}
-            />
-          </label>
-          <label>
-            border radius
-            <input
-              type="range"
-              value={borderRadius}
-              {...borderRadiusLimits}
-              onChange={e => setBorderRadius(parseInt(e.target.value || '0'))}
-            />
-            {borderRadius}
-          </label>
-          <label>
-            rotate
-            <input
-              type="range"
-              value={rotate}
-              {...rotateLimits}
-              onChange={e => setRotate(parseInt(e.target.value || '0'))}
-            />
-            {`${rotate}°`}
-          </label>
-        </div>
-
-        <svg
-          id="cropped-image-editor"
-          width={svgSide}
-          height={svgSide}
-          viewBox={`0 0 ${svgSide} ${svgSide}`}
-          className={`border border-solid border-gray-300 ${
-            bgDark ? 'bg-gray-900' : 'bg-gray-50'
-          }`}
-          ref={imageEditorRef}
+        <h1 className="font-serif font-normal text-gray-600">
+          Geometric Cropping Tool for Twitter profile pictures
+        </h1>
+        <a
+          href="https://github.com/shreshthmohan/next-blog/issues/24"
+          target="_blank"
+          rel="noreferrer"
         >
-          <image
-            className="cursor-grab"
-            ref={imageShapeRef}
-            href={imgSrc}
-            x={imageX}
-            y={imageY}
-            width={svgSide * zoomLevel}
-            height={svgSide * zoomLevel}
-            clipPath={maskOff ? `url(#${clipPathId})` : undefined}
-            mask={maskOff ? undefined : 'url(#tw-mask)'}
-          ></image>
-          {maskOff && (
-            <clipPath id={clipPathId}>
-              <path
-                d={dForPath}
-                transform={`rotate(${rotate})`}
-                transform-origin={`${shapeCenter.cx} ${shapeCenter.cy}`}
-              />
-            </clipPath>
-          )}
-          {!maskOff && (
-            <mask id="tw-mask">
-              <rect x="0" y="0" width="400" height="400" fill="#333"></rect>
-              <circle cx="200" cy="200" r="200" fill="#555"></circle>
-              <path
-                fill="#fff"
-                d={dForPath}
-                transform={`rotate(${rotate})`}
-                transform-origin={`${shapeCenter.cx} ${shapeCenter.cy}`}
-                clipPath="url(#for-mask)"
-              />
-            </mask>
-          )}
-          <clipPath id="for-mask">
-            <circle
-              cx="200"
-              cy="200"
-              r="200"
-              transform-origin={`${shapeCenter.cx} ${shapeCenter.cy}`}
-              transform={`rotate(${-rotate})`}
-            ></circle>
-          </clipPath>
-        </svg>
+          Report Issue
+        </a>
+        <div className="flex justify-between">
+          <div>
+            <svg
+              id="cropped-image-editor"
+              width={svgSide}
+              height={svgSide}
+              viewBox={`0 0 ${svgSide} ${svgSide}`}
+              className={`border border-solid border-gray-300 ${
+                bgDark ? 'bg-gray-900' : 'bg-gray-50'
+              }`}
+              ref={imageEditorRef}
+            >
+              <image
+                className="cursor-grab"
+                ref={imageShapeRef}
+                href={imgSrc}
+                x={imageX}
+                y={imageY}
+                width={svgSide * zoomLevel}
+                height={svgSide * zoomLevel}
+                clipPath={maskOff ? `url(#${clipPathId})` : undefined}
+                mask={maskOff ? undefined : 'url(#tw-mask)'}
+              ></image>
+              {maskOff && (
+                <clipPath id={clipPathId}>
+                  <path
+                    d={dForPath}
+                    transform={`rotate(${rotate})`}
+                    transform-origin={`${shapeCenter.cx} ${shapeCenter.cy}`}
+                  />
+                </clipPath>
+              )}
+              {!maskOff && (
+                <mask id="tw-mask">
+                  <rect x="0" y="0" width="400" height="400" fill="#333"></rect>
+                  <circle cx="200" cy="200" r="200" fill="#555"></circle>
+                  <path
+                    fill="#fff"
+                    d={dForPath}
+                    transform={`rotate(${rotate})`}
+                    transform-origin={`${shapeCenter.cx} ${shapeCenter.cy}`}
+                    clipPath="url(#for-mask)"
+                  />
+                </mask>
+              )}
+              <clipPath id="for-mask">
+                <circle
+                  cx="200"
+                  cy="200"
+                  r="200"
+                  transform-origin={`${shapeCenter.cx} ${shapeCenter.cy}`}
+                  transform={`rotate(${-rotate})`}
+                ></circle>
+              </clipPath>
+            </svg>
 
-        <button className="mt-3 py-2" onClick={handleDownloadImage}>
-          Download image
-        </button>
-        <canvas className="hidden" ref={canvasRef}></canvas>
-        {/* <img height="400" width="400" alt="output image" ref={outputImageRef} /> */}
-        <a className="hidden" ref={imageLinkRef}></a>
+            <canvas className="hidden" ref={canvasRef}></canvas>
+            {/* <img height="400" width="400" alt="output image" ref={outputImageRef} /> */}
+            <a className="hidden" ref={imageLinkRef}></a>
+          </div>
+
+          <div className="mb-6 flex w-[400px] flex-wrap gap-x-3 gap-y-2 text-sm">
+            <button
+              className="h-6"
+              onClick={() => {
+                setZoomLevel(1)
+              }}
+            >
+              Reset image zoom
+            </button>
+            <button
+              className="h-6"
+              onClick={() => {
+                setImagePos([0, 0])
+              }}
+            >
+              Reset image position
+            </button>
+            <button
+              onClick={() => {
+                setBgDark(!bgDark)
+              }}
+            >
+              Toggle SVG Background
+            </button>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={function (e) {
+                if (e.target.files.length) {
+                  setImageFile(e.target.files[0])
+                }
+              }}
+            />
+
+            <label>
+              Sides
+              <input
+                onChange={handleSidesChange}
+                type="range"
+                step="1"
+                value={sideCount}
+                {...sideCountLimits}
+              />
+              {sideCount}
+            </label>
+            <label>
+              Circumradius
+              <input
+                type="range"
+                value={circumRadius}
+                {...circumRadiusLimits}
+                onChange={e => setCircumRadius(parseInt(e.target.value || '0'))}
+              />
+              {circumRadius}
+            </label>
+            <label>
+              Crop X offset
+              <input
+                type="range"
+                value={cxOffset}
+                onChange={e => setCxOffset(parseInt(e.target.value || '0'))}
+              />
+            </label>
+            <label>
+              Crop Y offset
+              <input
+                type="range"
+                value={cyOffset}
+                onChange={e => setCyOffset(parseInt(e.target.value || '0'))}
+              />
+            </label>
+            <label>
+              border radius
+              <input
+                type="range"
+                value={borderRadius}
+                {...borderRadiusLimits}
+                onChange={e => setBorderRadius(parseInt(e.target.value || '0'))}
+              />
+              {borderRadius}
+            </label>
+            <label>
+              rotate
+              <input
+                type="range"
+                value={rotate}
+                {...rotateLimits}
+                onChange={e => setRotate(parseInt(e.target.value || '0'))}
+              />
+              {`${rotate}°`}
+            </label>
+            <button className="mt-2 w-full py-2" onClick={handleDownloadImage}>
+              Download image
+            </button>
+          </div>
+        </div>
       </main>
     </div>
   )
