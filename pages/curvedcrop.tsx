@@ -5,6 +5,7 @@ import { Canvg } from 'canvg'
 import { select } from 'd3-selection'
 import { drag } from 'd3-drag'
 import { zoom } from 'd3-zoom'
+import { NumberRange } from 'components/Inputs/NumberRange'
 
 const svgSide = 400
 const defaultImage = '/images/egg.jpg'
@@ -12,6 +13,9 @@ const sideCountLimits = { min: 3, max: 50 }
 const circumRadiusLimits = { min: 0, max: 500 }
 const rotateLimits = { min: 0, max: 360 }
 const borderRadiusLimits = { min: 0, max: 1800 }
+const cropOffsetLimits = { min: -800, max: 800 }
+const imgPosOffsetLimits = { min: -800, max: 800 }
+const zoomLevelLimits = { min: 0.01, max: 50 }
 
 const CurvedCrop: NextPage = () => {
   const [sideCount, setSideCount] = useState(6)
@@ -81,13 +85,13 @@ const CurvedCrop: NextPage = () => {
 
     select(image).call(
       drag()
-        .on('start', function (e) {
+        .on('start', function () {
           select(this).attr('fill', 'gray').classed('brightness-110', true)
         })
         .on('drag', function (e) {
           setImagePos(([x, y]) => [x + e.dx, y + e.dy])
         })
-        .on('end', function (e) {
+        .on('end', function () {
           select(this).attr('fill', 'black').classed('brightness-110', false)
         }),
     )
@@ -127,19 +131,20 @@ const CurvedCrop: NextPage = () => {
 
   return (
     <div className="flex font-sans">
-      <main className="mx-auto my-8 flex flex-col px-4">
-        <h1 className="font-serif font-normal text-gray-600">
+      <main className=" mx-auto my-8 flex  flex-col px-4">
+        <h1 className="mb-2 font-serif text-4xl font-normal text-gray-600">
           Geometric Cropping Tool for Twitter profile pictures
         </h1>
         <a
           href="https://github.com/shreshthmohan/next-blog/issues/24"
           target="_blank"
           rel="noreferrer"
+          className="mb-2 text-sm"
         >
           Report Issue
         </a>
-        <div className="flex flex-wrap place-content-center ">
-          <div className="mr-2">
+        <div className="flex flex-wrap justify-center gap-x-4 rounded border border-solid border-gray-300 py-2">
+          <div className="">
             <svg
               id="cropped-image-editor"
               width={svgSide}
@@ -199,7 +204,7 @@ const CurvedCrop: NextPage = () => {
             <a className="hidden" ref={imageLinkRef}></a>
           </div>
 
-          <div className="ml-2 mb-6 flex w-[400px] flex-wrap gap-x-3 gap-y-2 text-sm">
+          <div className=" flex w-[400px] flex-wrap gap-x-3 gap-y-1 text-sm">
             <input
               type="file"
               accept="image/*"
@@ -225,73 +230,85 @@ const CurvedCrop: NextPage = () => {
             >
               Toggle Background
             </button>
-            <div className="flex w-full justify-between">
-              <label>Sides</label>
-              <div className="flex w-2/3">
-                <input
-                  className="grow"
-                  onChange={handleSidesChange}
-                  type="range"
-                  step="1"
-                  value={sideCount}
-                  {...sideCountLimits}
-                />
-                <input
-                  type="number"
-                  className="w-10"
-                  name=""
-                  id=""
-                  value={sideCount}
-                />
-              </div>
-            </div>
-            <label>
-              Circumradius
-              <input
-                type="range"
-                value={circumRadius}
-                {...circumRadiusLimits}
-                onChange={e => setCircumRadius(parseInt(e.target.value || '0'))}
-              />
-              {circumRadius}
-            </label>
-            <label>
-              Crop X offset
-              <input
-                type="range"
-                value={cxOffset}
-                onChange={e => setCxOffset(parseInt(e.target.value || '0'))}
-              />
-            </label>
-            <label>
-              Crop Y offset
-              <input
-                type="range"
-                value={cyOffset}
-                onChange={e => setCyOffset(parseInt(e.target.value || '0'))}
-              />
-            </label>
-            <label>
-              border radius
-              <input
-                type="range"
-                value={borderRadius}
-                {...borderRadiusLimits}
-                onChange={e => setBorderRadius(parseInt(e.target.value || '0'))}
-              />
-              {borderRadius}
-            </label>
-            <label>
-              rotate
-              <input
-                type="range"
-                value={rotate}
-                {...rotateLimits}
-                onChange={e => setRotate(parseInt(e.target.value || '0'))}
-              />
-              {`${rotate}°`}
-            </label>
-            <button className="mt-2 w-full py-2" onClick={handleDownloadImage}>
+            <button onClick={() => setCxOffset(0)}>Reset crop X offset</button>
+            <button onClick={() => setCyOffset(0)}>Reset crop y offset</button>
+            <NumberRange
+              label="Sides"
+              onChange={handleSidesChange}
+              id="cc-poly-sides"
+              value={sideCount}
+              rangeLimits={sideCountLimits}
+            />
+            <NumberRange
+              label="Circumradius"
+              onChange={e => setCircumRadius(parseInt(e.target.value || '0'))}
+              id="cc-circumradius"
+              value={circumRadius}
+              rangeLimits={circumRadiusLimits}
+            />
+
+            <NumberRange
+              label="Crop X-offset"
+              id="cc-x-offset"
+              value={cxOffset}
+              onChange={e => setCxOffset(parseInt(e.target.value || '0'))}
+              rangeLimits={cropOffsetLimits}
+            />
+            <NumberRange
+              label="Crop Y-offset"
+              id="cc-y-offset"
+              value={cyOffset}
+              onChange={e => setCyOffset(parseInt(e.target.value || '0'))}
+              rangeLimits={cropOffsetLimits}
+            />
+            <NumberRange
+              label="Border radius"
+              id="cc-border-radius"
+              value={borderRadius}
+              rangeLimits={borderRadiusLimits}
+              onChange={e => setBorderRadius(parseInt(e.target.value || '0'))}
+            />
+            <NumberRange
+              label="Rotate"
+              id="cc-rotate"
+              value={rotate}
+              rangeLimits={rotateLimits}
+              onChange={e => setRotate(parseInt(e.target.value || '0'))}
+            />
+            <NumberRange
+              label="Image zoom"
+              id="cc-img-zoom"
+              value={zoomLevel}
+              rangeLimits={zoomLevelLimits}
+              onChange={e => setZoomLevel(parseFloat(e.target.value || '1'))}
+              step={0.1}
+            />
+            <NumberRange
+              label="Image X-offset"
+              id="cc-img-x-offset"
+              value={imagePos[0]}
+              onChange={e =>
+                setImagePos([
+                  parseInt(e.target.value || imagePos[0]),
+                  imagePos[1],
+                ])
+              }
+              rangeLimits={imgPosOffsetLimits}
+            />
+            <NumberRange
+              label="Image Y-offset"
+              id="cc-img-y-offset"
+              value={imagePos[1]}
+              onChange={e =>
+                setImagePos([
+                  imagePos[0],
+                  parseInt(e.target.value || imagePos[1]),
+                ])
+              }
+              rangeLimits={imgPosOffsetLimits}
+            />
+
+            <button className="w-full" onClick={handleDownloadImage}>
               Download image
             </button>
           </div>
