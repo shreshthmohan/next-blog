@@ -10,6 +10,10 @@ const IssueList: NextPage<{ issueList: [] }> = props => {
       <h1 className="text-3xl font-normal tracking-tight  text-gray-700 md:text-4xl">
         All of my writing
       </h1>
+      <p className="text-sm">
+        Note: I am still moving posts from my old blog here. Most of what you
+        see below might be some incomplete drafts.
+      </p>
       {props.issueList.map(({ id, slug: issueSlug, title, updated_at }) => (
         <div
           key={id}
