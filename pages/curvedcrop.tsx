@@ -1,4 +1,5 @@
 import { NextPage } from 'next'
+import { useRouter } from 'next/router'
 import { roundedPolygonByCircumRadius } from 'curved-polygon'
 import React, { useState, useRef, useEffect } from 'react'
 import { Canvg } from 'canvg'
@@ -18,6 +19,8 @@ const imgPosOffsetLimits = { min: -800, max: 800 }
 const zoomLevelLimits = { min: 0.01, max: 50 }
 
 const CurvedCrop: NextPage = () => {
+  const router = useRouter()
+
   const [sideCount, setSideCount] = useState(6)
   const [circumRadius, setCircumRadius] = useState(svgSide / 2)
   const [cxOffset, setCxOffset] = useState(0)
@@ -40,6 +43,19 @@ const CurvedCrop: NextPage = () => {
   // const outputImageRef = useRef(null)
 
   const mountedRef = useRef(false)
+
+  useEffect(() => {
+    console.log({ query: router.query })
+    const { sides } = router.query
+    if (sides && !isNaN(parseInt(sides as string))) {
+      setSideCount(parseInt(sides as string))
+    }
+  }, [router.query])
+
+  // useEffect(() => {
+  //   router.query.sides = sideCount.toString()
+  //   router.push(router)
+  // }, [sideCount, router])
 
   useEffect(() => {
     mountedRef.current = true
@@ -108,7 +124,11 @@ const CurvedCrop: NextPage = () => {
   }, []) // no need to attach drag listeners everytime something changes
 
   const handleSidesChange = e => {
+    // Handle values < 3
     setSideCount(parseInt(e.target.value))
+
+    router.query.sides = e.target.value
+    router.push(router)
   }
 
   const handleDownloadImage = () => {
@@ -143,6 +163,7 @@ const CurvedCrop: NextPage = () => {
         >
           Report Issue
         </a>
+
         <div className="flex flex-wrap justify-center gap-x-4 rounded border border-solid border-gray-300 py-2">
           <div className="">
             <svg
