@@ -6,6 +6,7 @@ import { Canvg } from 'canvg'
 import { select } from 'd3-selection'
 import { drag } from 'd3-drag'
 import { zoom } from 'd3-zoom'
+import { kebabCase } from 'lodash'
 import { NumberRange } from 'components/Inputs/NumberRange'
 
 const queryOptions = [
@@ -150,7 +151,23 @@ const CurvedCrop: NextPage = () => {
   })
 
   const handleChangeParam = (paramName: string, value) => {
-    setState({ ...state, [paramName]: value })
+    const parsedValue =
+      cropAndImageParams[paramName].type === 'int'
+        ? parseInt(value)
+        : parseFloat(value)
+
+    console.log({ parsedValue, paramName })
+    if (!isNaN(parsedValue)) {
+      setState({ ...state, [paramName]: parsedValue })
+
+      const queryParamName = kebabCase(paramName)
+      if (queryOptions.includes(queryParamName)) {
+        router.query[queryParamName] = value
+        router.push(router)
+      }
+    } else {
+      setState({ ...state, [paramName]: cropAndImageParams[paramName].default })
+    }
   }
 
   useEffect(() => {
@@ -326,16 +343,7 @@ const CurvedCrop: NextPage = () => {
                 <NumberRange
                   label={k}
                   onChange={e => {
-                    const parsedValue =
-                      cropAndImageParams[k].type === 'int'
-                        ? parseInt(e.target.value)
-                        : parseFloat(e.target.value)
-
-                    if (!isNaN(parsedValue)) {
-                      setState({ ...state, [k]: parsedValue })
-                    } else {
-                      setState({ ...state, [k]: cropAndImageParams[k].default })
-                    }
+                    handleChangeParam(k, e.target.value)
                   }}
                   id={`cc-${k}`}
                   value={state[k]}

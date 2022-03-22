@@ -17,6 +17,7 @@
     "d3-time-format": "^4.1.0",
     "d3-zoom": "^3.0.0",
     "gray-matter": "^4.0.3",
+    "lodash": "^4.17.21",
     "next": "12.1.0",
     "next-mdx-remote": "^4.0.0",
     "node-fetch": "^3.2.3",
