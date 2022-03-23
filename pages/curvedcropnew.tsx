@@ -7,6 +7,7 @@ import { select } from 'd3-selection'
 import { drag } from 'd3-drag'
 import { zoom } from 'd3-zoom'
 import { kebabCase } from 'lodash'
+import { camelCase } from 'lodash'
 import { NumberRange } from 'components/Inputs/NumberRange'
 
 const queryOptions = [
@@ -20,13 +21,6 @@ const queryOptions = [
 
 const svgSide = 400
 const defaultImage = '/images/egg.jpg'
-// const sideCountLimits = { min: 3, max: 50 }
-// const circumRadiusLimits = { min: 0, max: 500 }
-// const rotateLimits = { min: 0, max: 360 }
-// const borderRadiusLimits = { min: 0, max: 1800 }
-// const cropOffsetLimits = { min: -800, max: 800 }
-// const imgPosOffsetLimits = { min: -800, max: 800 }
-// const zoomLevelLimits = { min: 0.01, max: 50 }
 
 type IntOrFloat = 'int' | 'float'
 
@@ -84,6 +78,7 @@ const CurvedCrop: NextPage = () => {
   const [maskOff, setMaskOff] = useState(false)
   const [download, setDownload] = useState(false)
   const [bgDark, setBgDark] = useState(true)
+  const [userChangedInput, setUserChangedInput] = useState(false)
 
   const {
     imageXPosition,
@@ -102,14 +97,6 @@ const CurvedCrop: NextPage = () => {
   // const outputImageRef = useRef(null)
 
   const mountedRef = useRef(false)
-
-  // useEffect(() => {
-  //   console.log({ query: router.query })
-  //   const { sides } = router.query
-  //   if (sides && !isNaN(parseInt(sides as string))) {
-  //     setSideCount(parseInt(sides as string))
-  //   }
-  // }, [router.query])
 
   useEffect(() => {
     mountedRef.current = true
@@ -150,25 +137,60 @@ const CurvedCrop: NextPage = () => {
     }
   })
 
-  const handleChangeParam = (paramName: string, value) => {
+  const handleChangeStateAndQueryParam = (paramName: string, value) => {
     const parsedValue =
       cropAndImageParams[paramName].type === 'int'
         ? parseInt(value)
         : parseFloat(value)
 
-    console.log({ parsedValue, paramName })
     if (!isNaN(parsedValue)) {
       setState({ ...state, [paramName]: parsedValue })
 
       const queryParamName = kebabCase(paramName)
       if (queryOptions.includes(queryParamName)) {
-        router.query[queryParamName] = value
-        router.push(router)
+        router.push({
+          pathname: router.pathname,
+          query: { ...router.query, [queryParamName]: value },
+        })
       }
     } else {
       setState({ ...state, [paramName]: cropAndImageParams[paramName].default })
     }
+    setUserChangedInput(true)
   }
+
+  const handleChangeState = (paramName: string, value) => {
+    const parsedValue =
+      cropAndImageParams[paramName].type === 'int'
+        ? parseInt(value)
+        : parseFloat(value)
+    if (!isNaN(parsedValue)) {
+      setState(state => ({ ...state, [paramName]: parsedValue }))
+    } else {
+      setState(state => ({
+        ...state,
+        [paramName]: cropAndImageParams[paramName].default,
+      }))
+    }
+  }
+
+  useEffect(() => {
+    if (!userChangedInput) {
+      const validQueryParams = Object.keys(router.query).filter(qp =>
+        queryOptions.includes(qp),
+      )
+      console.log(validQueryParams)
+
+      const camelifiedQueryParams = validQueryParams.map(qp => ({
+        kebab: qp,
+        camel: camelCase(qp),
+      }))
+
+      camelifiedQueryParams.forEach(qp => {
+        handleChangeState(qp.camel, router.query[qp.kebab])
+      })
+    }
+  }, [router.query, userChangedInput])
 
   useEffect(() => {
     const image = imageShapeRef.current
@@ -179,8 +201,14 @@ const CurvedCrop: NextPage = () => {
           select(this).attr('fill', 'gray').classed('brightness-110', true)
         })
         .on('drag', function (e) {
-          handleChangeParam('imageXPosition', imageXPosition + e.dx)
-          handleChangeParam('imageYPosition', imageYPosition + e.dy)
+          handleChangeStateAndQueryParam(
+            'imageXPosition',
+            imageXPosition + e.dx,
+          )
+          handleChangeStateAndQueryParam(
+            'imageYPosition',
+            imageYPosition + e.dy,
+          )
         })
         .on('end', function () {
           select(this).attr('fill', 'black').classed('brightness-110', false)
@@ -192,20 +220,13 @@ const CurvedCrop: NextPage = () => {
         .scaleExtent([0.01, 50])
         .on('zoom', ({ transform }) => {
           const { x, y, k } = transform
-          handleChangeParam('imageZoom', k)
-          handleChangeParam('imageXPosition', x)
-          handleChangeParam('imageYPosition', y)
+          handleChangeStateAndQueryParam('imageZoom', k)
+          handleChangeStateAndQueryParam('imageXPosition', x)
+          handleChangeStateAndQueryParam('imageYPosition', y)
         }),
     )
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []) // no need to attach drag listeners everytime something changes
-
-  // const handleSidesChange = e => {
-  //   // Handle values < 3
-  //   setSideCount(parseInt(e.target.value))
-
-  //   router.query.sides = e.target.value
-  //   router.push(router)
-  // }
 
   const handleDownloadImage = () => {
     setMaskOff(true)
@@ -316,9 +337,9 @@ const CurvedCrop: NextPage = () => {
             />
             <button
               onClick={() => {
-                handleChangeParam('imageZoom', 1)
-                handleChangeParam('imageXPosition', 0)
-                handleChangeParam('imageYPosition', 0)
+                handleChangeStateAndQueryParam('imageZoom', 1)
+                handleChangeStateAndQueryParam('imageXPosition', 0)
+                handleChangeStateAndQueryParam('imageYPosition', 0)
               }}
             >
               {'Reset image zoom & position'}
@@ -331,10 +352,14 @@ const CurvedCrop: NextPage = () => {
             >
               Toggle Background
             </button>
-            <button onClick={() => handleChangeParam('cropXOffset', 0)}>
+            <button
+              onClick={() => handleChangeStateAndQueryParam('cropXOffset', 0)}
+            >
               Reset crop X offset
             </button>
-            <button onClick={() => handleChangeParam('cropYOffset', 0)}>
+            <button
+              onClick={() => handleChangeStateAndQueryParam('cropYOffset', 0)}
+            >
               Reset crop y offset
             </button>
 
@@ -343,7 +368,7 @@ const CurvedCrop: NextPage = () => {
                 <NumberRange
                   label={k}
                   onChange={e => {
-                    handleChangeParam(k, e.target.value)
+                    handleChangeStateAndQueryParam(k, e.target.value)
                   }}
                   id={`cc-${k}`}
                   value={state[k]}

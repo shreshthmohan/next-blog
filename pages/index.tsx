@@ -111,7 +111,7 @@ const Home: NextPage = () => {
       </h2>
       <div className="rounded border border-solid border-gray-300 p-3">
         <h3 className="m-0 text-xl font-normal">
-          <Link href="curvedcrop">
+          <Link href="/curvedcrop">
             <a>Cropping tool for Twitter</a>
           </Link>
         </h3>
@@ -123,15 +123,23 @@ const Home: NextPage = () => {
         <div className="mt-2 flex flex-wrap justify-center rounded border border-solid border-gray-100 bg-gray-200 p-2">
           <CroppedImageSample imgSrc="/images/ccdemo/curvedcrop2.png" />
           <CroppedImageSample imgSrc="/images/ccdemo/curvedcrop10.png" />
-          <CroppedImageSample imgSrc="/images/ccdemo/curvedcrop6.png" />
+          <Link href="/curvedcropnew?circum-radius=201&sides=8&border-radius=490">
+            <a>
+              <CroppedImageSample imgSrc="/images/ccdemo/curvedcrop6.png" />
+            </a>
+          </Link>
           <CroppedImageSample imgSrc="/images/ccdemo/curvedcrop4.png" />
-          <CroppedImageSample imgSrc="/images/ccdemo/curvedcrop11.png" />
+          <Link href="/curvedcropnew?sides=3&border-radius=0&rotate=90">
+            <a>
+              <CroppedImageSample imgSrc="/images/ccdemo/curvedcrop11.png" />
+            </a>
+          </Link>
           <CroppedImageSample imgSrc="/images/ccdemo/curvedcrop5.png" />
         </div>
       </div>
 
       <h3 className=" text-xl font-normal">
-        <Link href="bullsandcows">
+        <Link href="/bullsandcows">
           <a>Bulls and Cows: A guessing game</a>
         </Link>
       </h3>
