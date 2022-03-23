@@ -40,7 +40,7 @@ export default function BaseReadingLayout({
                 {/* TODO test a11y */}
                 <NavLink href="/" text="Home" />
                 <NavLink href="/blog" text="Blog" />
-                <NavLink href="/about" text="About + Now" />
+                {/* <NavLink href="/about" text="About + Now" /> */}
                 {/* blog */}
                 {/* projects */}
                 {/* snippets/components */}
