@@ -6,89 +6,35 @@ import { Canvg } from 'canvg'
 import { select } from 'd3-selection'
 import { drag } from 'd3-drag'
 import { zoom } from 'd3-zoom'
-import { kebabCase } from 'lodash'
-import { camelCase } from 'lodash'
 import { NumberRange } from 'components/Inputs/NumberRange'
-
-const queryOptions = [
-  'sides',
-  'circum-radius',
-  'rotate',
-  'border-radius',
-  'crop-x-offset',
-  'crop-y-offset',
-]
 
 const svgSide = 400
 const defaultImage = '/images/egg.jpg'
-
-type IntOrFloat = 'int' | 'float'
-
-type CropParam = {
-  limits: { min: number; max: number }
-  default: number
-  type: IntOrFloat
-}
-interface CropParams {
-  [key: string]: CropParam
-}
-
-const cropAndImageParams: CropParams = {
-  sides: { limits: { min: 3, max: 50 }, default: 6, type: 'int' },
-  circumRadius: {
-    limits: { min: 0, max: 500 },
-    default: svgSide / 2,
-    type: 'int',
-  },
-  rotate: { limits: { min: 0, max: 360 }, default: 0, type: 'int' },
-  borderRadius: { limits: { min: 0, max: 1800 }, default: 50, type: 'int' },
-  cropXOffset: { limits: { min: -800, max: 800 }, default: 0, type: 'int' },
-  cropYOffset: { limits: { min: -800, max: 800 }, default: 0, type: 'int' },
-  imageXPosition: { limits: { min: -800, max: 800 }, default: 0, type: 'int' },
-  imageYPosition: { limits: { min: -800, max: 800 }, default: 0, type: 'int' },
-  imageZoom: { limits: { min: 0.01, max: 50 }, default: 1, type: 'float' },
-}
-
-type cropAndImageState = {
-  sides: number
-  circumRadius: number
-  rotate: number
-  borderRadius: number
-  cropXOffset: number
-  cropYOffset: number
-  imageXPosition: number
-  imageYPosition: number
-  imageZoom: number
-}
+const sideCountLimits = { min: 3, max: 50 }
+const circumRadiusLimits = { min: 0, max: 500 }
+const rotateLimits = { min: 0, max: 360 }
+const borderRadiusLimits = { min: 0, max: 1800 }
+const cropOffsetLimits = { min: -800, max: 800 }
+const imgPosOffsetLimits = { min: -800, max: 800 }
+const zoomLevelLimits = { min: 0.01, max: 50 }
 
 const CurvedCrop: NextPage = () => {
   const router = useRouter()
 
-  const [state, setState] = useState(() => {
-    const allParamKeys = Object.keys(cropAndImageParams)
-    const init = {}
-    // init object will have only default param values
-    allParamKeys.forEach(k => {
-      init[k] = cropAndImageParams[k].default
-    })
-    return init as cropAndImageState
-  })
-
+  const [sideCount, setSideCount] = useState(6)
+  const [circumRadius, setCircumRadius] = useState(svgSide / 2)
+  const [cxOffset, setCxOffset] = useState(0)
+  const [cyOffset, setCyOffset] = useState(0)
+  const [borderRadius, setBorderRadius] = useState(50)
+  const [rotate, setRotate] = useState(0)
   const [imageFile, setImageFile] = useState(null)
+  const [imagePos, setImagePos] = useState([0, 0])
   const [maskOff, setMaskOff] = useState(false)
   const [download, setDownload] = useState(false)
+  const [zoomLevel, setZoomLevel] = useState(1)
   const [bgDark, setBgDark] = useState(true)
-  const [userChangedInput, setUserChangedInput] = useState(false)
 
-  const {
-    imageXPosition,
-    imageYPosition,
-    imageZoom,
-    rotate,
-    circumRadius,
-    sides: sideCount,
-    borderRadius,
-  } = state
+  const [imageX, imageY] = imagePos
 
   const imageEditorRef = useRef(null)
   const canvasRef = useRef(null)
@@ -97,6 +43,19 @@ const CurvedCrop: NextPage = () => {
   // const outputImageRef = useRef(null)
 
   const mountedRef = useRef(false)
+
+  useEffect(() => {
+    console.log({ query: router.query })
+    const { sides } = router.query
+    if (sides && !isNaN(parseInt(sides as string))) {
+      setSideCount(parseInt(sides as string))
+    }
+  }, [router.query])
+
+  // useEffect(() => {
+  //   router.query.sides = sideCount.toString()
+  //   router.push(router)
+  // }, [sideCount, router])
 
   useEffect(() => {
     mountedRef.current = true
@@ -137,61 +96,6 @@ const CurvedCrop: NextPage = () => {
     }
   })
 
-  const handleChangeStateAndQueryParam = (paramName: string, value) => {
-    const parsedValue =
-      cropAndImageParams[paramName].type === 'int'
-        ? parseInt(value)
-        : parseFloat(value)
-
-    if (!isNaN(parsedValue)) {
-      setState({ ...state, [paramName]: parsedValue })
-
-      const queryParamName = kebabCase(paramName)
-      if (queryOptions.includes(queryParamName)) {
-        router.push({
-          pathname: router.pathname,
-          query: { ...router.query, [queryParamName]: value },
-        })
-      }
-    } else {
-      setState({ ...state, [paramName]: cropAndImageParams[paramName].default })
-    }
-    setUserChangedInput(true)
-  }
-
-  const handleChangeState = (paramName: string, value) => {
-    const parsedValue =
-      cropAndImageParams[paramName].type === 'int'
-        ? parseInt(value)
-        : parseFloat(value)
-    if (!isNaN(parsedValue)) {
-      setState(state => ({ ...state, [paramName]: parsedValue }))
-    } else {
-      setState(state => ({
-        ...state,
-        [paramName]: cropAndImageParams[paramName].default,
-      }))
-    }
-  }
-
-  useEffect(() => {
-    if (!userChangedInput) {
-      const validQueryParams = Object.keys(router.query).filter(qp =>
-        queryOptions.includes(qp),
-      )
-      console.log(validQueryParams)
-
-      const camelifiedQueryParams = validQueryParams.map(qp => ({
-        kebab: qp,
-        camel: camelCase(qp),
-      }))
-
-      camelifiedQueryParams.forEach(qp => {
-        handleChangeState(qp.camel, router.query[qp.kebab])
-      })
-    }
-  }, [router.query, userChangedInput])
-
   useEffect(() => {
     const image = imageShapeRef.current
 
@@ -201,14 +105,7 @@ const CurvedCrop: NextPage = () => {
           select(this).attr('fill', 'gray').classed('brightness-110', true)
         })
         .on('drag', function (e) {
-          handleChangeStateAndQueryParam(
-            'imageXPosition',
-            imageXPosition + e.dx,
-          )
-          handleChangeStateAndQueryParam(
-            'imageYPosition',
-            imageYPosition + e.dy,
-          )
+          setImagePos(([x, y]) => [x + e.dx, y + e.dy])
         })
         .on('end', function () {
           select(this).attr('fill', 'black').classed('brightness-110', false)
@@ -220,23 +117,26 @@ const CurvedCrop: NextPage = () => {
         .scaleExtent([0.01, 50])
         .on('zoom', ({ transform }) => {
           const { x, y, k } = transform
-          handleChangeStateAndQueryParam('imageZoom', k)
-          handleChangeStateAndQueryParam('imageXPosition', x)
-          handleChangeStateAndQueryParam('imageYPosition', y)
+          setZoomLevel(k)
+          setImagePos([x, y])
         }),
     )
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []) // no need to attach drag listeners everytime something changes
+
+  const handleSidesChange = e => {
+    // Handle values < 3
+    setSideCount(parseInt(e.target.value))
+
+    router.query.sides = e.target.value
+    router.push(router)
+  }
 
   const handleDownloadImage = () => {
     setMaskOff(true)
     setDownload(true)
   }
 
-  const shapeCenter = {
-    cx: svgSide / 2 + state.cropXOffset,
-    cy: svgSide / 2 + state.cropYOffset,
-  }
+  const shapeCenter = { cx: svgSide / 2 + cxOffset, cy: svgSide / 2 + cyOffset }
 
   const dForPath = roundedPolygonByCircumRadius({
     circumRadius,
@@ -245,7 +145,7 @@ const CurvedCrop: NextPage = () => {
     ...shapeCenter,
   })
 
-  const clipPathId = `polygon-sided-${state.sides}`
+  const clipPathId = `polygon-sided-${sideCount}`
 
   const imgSrc = imageFile ? URL.createObjectURL(imageFile) : defaultImage
 
@@ -253,7 +153,7 @@ const CurvedCrop: NextPage = () => {
     <div className="flex font-sans">
       <main className=" mx-auto my-8 flex  flex-col px-4">
         <h1 className="mb-2 font-serif text-4xl font-normal text-gray-600">
-          A Geometric Cropping Tool for Twitter profile pictures
+          Geometric Cropping Tool for Twitter profile pictures
         </h1>
         <a
           href="https://github.com/shreshthmohan/next-blog/issues/24"
@@ -280,10 +180,10 @@ const CurvedCrop: NextPage = () => {
                 className="cursor-grab"
                 ref={imageShapeRef}
                 href={imgSrc}
-                x={imageXPosition}
-                y={imageYPosition}
-                width={svgSide * imageZoom}
-                height={svgSide * imageZoom}
+                x={imageX}
+                y={imageY}
+                width={svgSide * zoomLevel}
+                height={svgSide * zoomLevel}
                 clipPath={maskOff ? `url(#${clipPathId})` : undefined}
                 mask={maskOff ? undefined : 'url(#tw-mask)'}
               ></image>
@@ -337,9 +237,8 @@ const CurvedCrop: NextPage = () => {
             />
             <button
               onClick={() => {
-                handleChangeStateAndQueryParam('imageZoom', 1)
-                handleChangeStateAndQueryParam('imageXPosition', 0)
-                handleChangeStateAndQueryParam('imageYPosition', 0)
+                setZoomLevel(1)
+                setImagePos([0, 0])
               }}
             >
               {'Reset image zoom & position'}
@@ -352,31 +251,83 @@ const CurvedCrop: NextPage = () => {
             >
               Toggle Background
             </button>
-            <button
-              onClick={() => handleChangeStateAndQueryParam('cropXOffset', 0)}
-            >
-              Reset crop X offset
-            </button>
-            <button
-              onClick={() => handleChangeStateAndQueryParam('cropYOffset', 0)}
-            >
-              Reset crop y offset
-            </button>
+            <button onClick={() => setCxOffset(0)}>Reset crop X offset</button>
+            <button onClick={() => setCyOffset(0)}>Reset crop y offset</button>
+            <NumberRange
+              label="Sides"
+              onChange={handleSidesChange}
+              id="cc-poly-sides"
+              value={sideCount}
+              rangeLimits={sideCountLimits}
+            />
+            <NumberRange
+              label="Circumradius"
+              onChange={e => setCircumRadius(parseInt(e.target.value || '0'))}
+              id="cc-circumradius"
+              value={circumRadius}
+              rangeLimits={circumRadiusLimits}
+            />
 
-            {Object.keys(state).map(k => {
-              return (
-                <NumberRange
-                  label={k}
-                  onChange={e => {
-                    handleChangeStateAndQueryParam(k, e.target.value)
-                  }}
-                  id={`cc-${k}`}
-                  value={state[k]}
-                  rangeLimits={cropAndImageParams[k].limits}
-                  key={k}
-                />
-              )
-            })}
+            <NumberRange
+              label="Crop X-offset"
+              id="cc-x-offset"
+              value={cxOffset}
+              onChange={e => setCxOffset(parseInt(e.target.value || '0'))}
+              rangeLimits={cropOffsetLimits}
+            />
+            <NumberRange
+              label="Crop Y-offset"
+              id="cc-y-offset"
+              value={cyOffset}
+              onChange={e => setCyOffset(parseInt(e.target.value || '0'))}
+              rangeLimits={cropOffsetLimits}
+            />
+            <NumberRange
+              label="Border radius"
+              id="cc-border-radius"
+              value={borderRadius}
+              rangeLimits={borderRadiusLimits}
+              onChange={e => setBorderRadius(parseInt(e.target.value || '0'))}
+            />
+            <NumberRange
+              label="Rotate"
+              id="cc-rotate"
+              value={rotate}
+              rangeLimits={rotateLimits}
+              onChange={e => setRotate(parseInt(e.target.value || '0'))}
+            />
+            <NumberRange
+              label="Image zoom"
+              id="cc-img-zoom"
+              value={zoomLevel}
+              rangeLimits={zoomLevelLimits}
+              onChange={e => setZoomLevel(parseFloat(e.target.value || '1'))}
+              step={0.1}
+            />
+            <NumberRange
+              label="Image X-offset"
+              id="cc-img-x-offset"
+              value={imagePos[0]}
+              onChange={e =>
+                setImagePos([
+                  parseInt(e.target.value || imagePos[0]),
+                  imagePos[1],
+                ])
+              }
+              rangeLimits={imgPosOffsetLimits}
+            />
+            <NumberRange
+              label="Image Y-offset"
+              id="cc-img-y-offset"
+              value={imagePos[1]}
+              onChange={e =>
+                setImagePos([
+                  imagePos[0],
+                  parseInt(e.target.value || imagePos[1]),
+                ])
+              }
+              rangeLimits={imgPosOffsetLimits}
+            />
 
             <button className="w-full" onClick={handleDownloadImage}>
               Download image

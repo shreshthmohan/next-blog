@@ -121,20 +121,36 @@ const Home: NextPage = () => {
           cropped using the tool:
         </p>
         <div className="mt-2 flex flex-wrap justify-center rounded border border-solid border-gray-100 bg-gray-200 p-2">
-          <CroppedImageSample imgSrc="/images/ccdemo/curvedcrop2.png" />
-          <CroppedImageSample imgSrc="/images/ccdemo/curvedcrop10.png" />
-          <Link href="/curvedcropnew?circum-radius=201&sides=8&border-radius=490">
+          <Link href="/curvedcrop?sides=26&border-radius=1396&circum-radius=145">
+            <a>
+              <CroppedImageSample imgSrc="/images/ccdemo/curvedcrop2.png" />
+            </a>
+          </Link>
+          <Link href="/curvedcrop?sides=10&border-radius=1070&circum-radius=181">
+            <a>
+              <CroppedImageSample imgSrc="/images/ccdemo/curvedcrop10.png" />
+            </a>
+          </Link>
+          <Link href="/curvedcrop?circum-radius=201&sides=8&border-radius=490">
             <a>
               <CroppedImageSample imgSrc="/images/ccdemo/curvedcrop6.png" />
             </a>
           </Link>
-          <CroppedImageSample imgSrc="/images/ccdemo/curvedcrop4.png" />
-          <Link href="/curvedcropnew?sides=3&border-radius=0&rotate=90">
+          <Link href="/curvedcrop?circum-radius=206&sides=6&border-radius=50">
+            <a>
+              <CroppedImageSample imgSrc="/images/ccdemo/curvedcrop4.png" />
+            </a>
+          </Link>
+          <Link href="/curvedcrop?sides=3&border-radius=0&rotate=90">
             <a>
               <CroppedImageSample imgSrc="/images/ccdemo/curvedcrop11.png" />
             </a>
           </Link>
-          <CroppedImageSample imgSrc="/images/ccdemo/curvedcrop5.png" />
+          <Link href="/curvedcrop?sides=7&border-radius=50&circum-radius=204">
+            <a>
+              <CroppedImageSample imgSrc="/images/ccdemo/curvedcrop5.png" />
+            </a>
+          </Link>
         </div>
       </div>
 
