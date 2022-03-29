@@ -2,6 +2,7 @@ import BaseReadingLayout from 'layouts/BaseReadingLayout'
 import type { NextPage } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
+import { CroppedImageSample } from 'components/curvedcrop/Presets'
 
 const DataVizCard = ({
   title,
@@ -25,12 +26,6 @@ const DataVizCard = ({
         <Image src={imgSrc} alt={imgAlt} height={imgHeight} width={imgWidth} />
       </div>
     </a>
-  </div>
-)
-
-const CroppedImageSample = ({ imgSrc }: { imgSrc: string }) => (
-  <div className="m-1 h-[200px] w-[200px] overflow-hidden rounded-full border-2 border-solid border-gray-400">
-    <Image src={imgSrc} alt="img famous person" width="200" height="200" />
   </div>
 )
 

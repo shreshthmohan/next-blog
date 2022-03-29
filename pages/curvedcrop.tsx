@@ -2,6 +2,7 @@ import { NextPage } from 'next'
 import { useRouter } from 'next/router'
 import { roundedPolygonByCircumRadius } from 'curved-polygon'
 import React, { useState, useRef, useEffect } from 'react'
+import Link from 'next/link'
 import { Canvg } from 'canvg'
 import { select } from 'd3-selection'
 import { drag } from 'd3-drag'
@@ -9,6 +10,7 @@ import { zoom } from 'd3-zoom'
 import { kebabCase } from 'lodash'
 import { camelCase } from 'lodash'
 import { NumberRange } from 'components/Inputs/NumberRange'
+import { CroppedImageSample } from 'components/curvedcrop/Presets'
 
 const queryOptions = [
   'sides',
@@ -389,6 +391,56 @@ const CurvedCrop: NextPage = () => {
               Download image
             </button>
           </div>
+        </div>
+        <div className="flex pt-2">
+          <Link href="/curvedcrop?sides=26&border-radius=1396&circum-radius=145">
+            <a>
+              <CroppedImageSample
+                size="sm"
+                imgSrc="/images/ccdemo/curvedcrop2.png"
+              />
+            </a>
+          </Link>
+          <Link href="/curvedcrop?sides=10&border-radius=1070&circum-radius=181">
+            <a>
+              <CroppedImageSample
+                size="sm"
+                imgSrc="/images/ccdemo/curvedcrop10.png"
+              />
+            </a>
+          </Link>
+          <Link href="/curvedcrop?circum-radius=201&sides=8&border-radius=490">
+            <a>
+              <CroppedImageSample
+                size="sm"
+                imgSrc="/images/ccdemo/curvedcrop6.png"
+              />
+            </a>
+          </Link>
+          <Link href="/curvedcrop?circum-radius=206&sides=6&border-radius=50">
+            <a>
+              <CroppedImageSample
+                size="sm"
+                imgSrc="/images/ccdemo/curvedcrop4.png"
+              />
+            </a>
+          </Link>
+          <Link href="/curvedcrop?sides=3&border-radius=0&rotate=90&circum-radius=200">
+            <a>
+              <CroppedImageSample
+                size="sm"
+                imgSrc="/images/ccdemo/curvedcrop11.png"
+              />
+            </a>
+          </Link>
+          <Link href="/curvedcrop?sides=7&border-radius=50&circum-radius=204">
+            <a>
+              <CroppedImageSample
+                size="sm"
+                imgSrc="/images/ccdemo/curvedcrop5.png"
+              />
+            </a>
+          </Link>
         </div>
       </main>
     </div>
