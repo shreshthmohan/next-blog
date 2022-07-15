@@ -6,9 +6,9 @@ import { Canvg } from 'canvg'
 import { select } from 'd3-selection'
 import { drag } from 'd3-drag'
 import { zoom } from 'd3-zoom'
-import { kebabCase } from 'lodash'
-import { camelCase } from 'lodash'
+import { kebabCase, camelCase } from 'lodash'
 import { NumberRange } from 'components/Inputs/NumberRange'
+import { CroppedImageSample } from 'components/curvedcrop/Presets'
 
 const queryOptions = [
   'sides',
@@ -66,6 +66,39 @@ type cropAndImageState = {
   imageYPosition: number
   imageZoom: number
 }
+
+const presets = [
+  {
+    name: 'maathai',
+    params: { sides: 26, borderRadius: 1396, circumRadius: 145, rotate: 0 },
+    previewImage: '/images/ccdemo/curvedcrop2.png',
+  },
+  {
+    name: 'bravo',
+    params: { sides: 10, borderRadius: 1070, circumRadius: 181, rotate: 0 },
+    previewImage: '/images/ccdemo/curvedcrop10.png',
+  },
+  {
+    name: 'goodall',
+    params: { sides: 8, borderRadius: 490, circumRadius: 201, rotate: 0 },
+    previewImage: '/images/ccdemo/curvedcrop6.png',
+  },
+  {
+    name: 'mandela',
+    params: { sides: 6, borderRadius: 50, circumRadius: 206, rotate: 0 },
+    previewImage: '/images/ccdemo/curvedcrop4.png',
+  },
+  {
+    name: 'einstein',
+    params: { sides: 3, borderRadius: 0, circumRadius: 200, rotate: 90 },
+    previewImage: '/images/ccdemo/curvedcrop11.png',
+  },
+  {
+    name: 'torvalds',
+    params: { sides: 7, borderRadius: 50, circumRadius: 204, rotate: 0 },
+    previewImage: '/images/ccdemo/curvedcrop5.png',
+  },
+]
 
 const CurvedCrop: NextPage = () => {
   const router = useRouter()
@@ -150,15 +183,21 @@ const CurvedCrop: NextPage = () => {
         : parseFloat(value)
 
     if (!isNaN(parsedValue)) {
-      setState(prevState => ({ ...prevState, [paramName]: parsedValue }))
-
-      const queryParamName = kebabCase(paramName)
-      if (queryOptions.includes(queryParamName)) {
+      setState(prevState => {
+        const nextState = { ...prevState, [paramName]: parsedValue }
+        const initQuery = { ...router.query }
+        Object.keys(nextState).map(k => {
+          const queryParamName = kebabCase(k)
+          if (queryOptions.includes(queryParamName)) {
+            initQuery[queryParamName] = nextState[k]
+          }
+        })
         router.push({
           pathname: router.pathname,
-          query: { ...router.query, [queryParamName]: value },
+          query: initQuery,
         })
-      }
+        return nextState
+      })
     } else {
       setState(prevState => ({
         ...prevState,
@@ -188,7 +227,6 @@ const CurvedCrop: NextPage = () => {
       const validQueryParams = Object.keys(router.query).filter(qp =>
         queryOptions.includes(qp),
       )
-      console.log(validQueryParams)
 
       const camelifiedQueryParams = validQueryParams.map(qp => ({
         kebab: qp,
@@ -389,6 +427,20 @@ const CurvedCrop: NextPage = () => {
               Download image
             </button>
           </div>
+        </div>
+        <div className="flex pt-2">
+          {presets.map(p => (
+            <div
+              key={p.name}
+              onClick={() => {
+                Object.keys(p.params).forEach(pp => {
+                  handleChangeStateAndQueryParam(pp, p.params[pp])
+                })
+              }}
+            >
+              <CroppedImageSample size="sm" imgSrc={p.previewImage} />
+            </div>
+          ))}
         </div>
       </main>
     </div>
