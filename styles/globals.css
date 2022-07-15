@@ -3,10 +3,18 @@
 @tailwind utilities;
 
 @layer base {
+  html {
+    @apply w-full overflow-x-hidden;
+  }
   html,
   body {
     margin: 0px;
-    @apply h-full;
+    @apply box-border h-full dark:bg-neutral-900 dark:text-slate-300;
+  }
+  *,
+  *:before,
+  *:after {
+    box-sizing: inherit;
   }
 
   #__next {
@@ -14,7 +22,7 @@
   }
 
   main {
-    @apply text-lg;
+    /* @apply text-lg; */
   }
 }
 
@@ -57,4 +65,65 @@
 
 .skip-to-content {
   @apply absolute -left-1/4 -top-8  -translate-y-12 transform px-4 py-3 focus:top-0 focus:translate-y-0;
+}
+
+/* inline code styling*/
+.article-body code {
+  @apply rounded-md bg-gray-100 px-1 text-base dark:bg-[#6e768166];
+}
+
+/* Multi-line code blocks styling start */
+.article-body pre {
+  @apply overflow-x-auto rounded-md border border-solid border-gray-200 bg-gray-100 px-4 py-2 first-letter:rounded-md dark:border-gray-700 dark:bg-[#161b22];
+}
+
+.article-body pre code {
+  @apply bg-transparent p-0 text-zinc-800 dark:text-slate-300;
+}
+
+.article-body pre code .token.keyword {
+  @apply text-violet-600;
+}
+
+.article-body pre code .token.keyword.module {
+  @apply text-red-600;
+}
+
+.article-body pre code .token.class-name {
+  @apply text-amber-800;
+}
+
+.article-body pre code .token.operator {
+  @apply text-sky-800;
+}
+.article-body pre code .token.constant {
+  @apply text-sky-700;
+}
+
+.article-body pre code .token.string {
+  @apply text-sky-900 dark:text-blue-300;
+}
+
+.article-body pre code .token.maybe-class-name {
+  @apply text-amber-800;
+}
+
+.article-body pre code .token.comment {
+  @apply text-gray-500 dark:text-zinc-400;
+}
+
+.article-body pre code .token.literal-property.property {
+  @apply text-sky-700;
+}
+
+.article-body pre code .token.property-access {
+  @apply text-sky-700;
+}
+
+.article-body pre code .token.function {
+  @apply text-violet-600;
+}
+
+.article-body pre code .token.control-flow {
+  @apply text-red-600;
 }
