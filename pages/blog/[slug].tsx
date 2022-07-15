@@ -5,7 +5,8 @@ import { siteWide } from 'siteDetails'
 
 const { siteName } = siteWide
 
-export default function Issue({ content, metaData }) {
+export default function Issue(issueData) {
+  const { content, metaData } = issueData
   const { title, summary, updated_at, created_at } = metaData
   return (
     <BaseReadingLayout
@@ -14,12 +15,12 @@ export default function Issue({ content, metaData }) {
       date={updated_at || created_at}
       type="article"
     >
-      <article className="mx-auto mb-16 flex w-full max-w-2xl flex-col items-start justify-center">
+      <article className="mx-auto mb-16 flex w-full max-w-screen-xl flex-col items-start justify-center">
         <header className="mb-4 w-full border-0 border-b-2 border-solid border-gray-200">
           <h1 className="mb-1 text-3xl font-normal tracking-tight  text-gray-700 md:text-4xl">
             {title}
           </h1>
-          <p className="mt-0 mb-1 text-xl text-gray-700">{summary}</p>
+          <div className="mt-0 mb-1 text-xl text-gray-700">{summary}</div>
         </header>
         <div className="article-body mt-4 w-full max-w-none">
           <MDXRemote {...content} />

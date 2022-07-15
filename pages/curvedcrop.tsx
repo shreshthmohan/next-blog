@@ -21,6 +21,15 @@ const queryOptions = [
   'crop-y-offset',
 ]
 
+const queryOptions = [
+  'sides',
+  'circum-radius',
+  'rotate',
+  'border-radius',
+  'crop-x-offset',
+  'crop-y-offset',
+]
+
 const svgSide = 400
 const defaultImage = '/images/egg.jpg'
 
