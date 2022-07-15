@@ -3,10 +3,18 @@
 @tailwind utilities;
 
 @layer base {
+  html {
+    @apply w-full overflow-x-hidden;
+  }
   html,
   body {
     margin: 0px;
-    @apply h-full dark:bg-neutral-900 dark:text-slate-300;
+    @apply box-border h-full dark:bg-neutral-900 dark:text-slate-300;
+  }
+  *,
+  *:before,
+  *:after {
+    box-sizing: inherit;
   }
 
   #__next {
@@ -66,7 +74,7 @@
 
 /* Multi-line code blocks styling start */
 .article-body pre {
-  @apply overflow-x-scroll rounded-md border border-solid border-gray-200 bg-gray-100 px-4 py-2 dark:border-gray-700 dark:bg-[#161b22];
+  @apply overflow-x-auto rounded-md border border-solid border-gray-200 bg-gray-100 px-4 py-2 first-letter:rounded-md dark:border-gray-700 dark:bg-[#161b22];
 }
 
 .article-body pre code {

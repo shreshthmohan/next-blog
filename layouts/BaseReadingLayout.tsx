@@ -21,7 +21,7 @@ function NavLink({ href, text }) {
 
 export default function BaseReadingLayout({
   children,
-  maxWidthClassName = 'max-w-prose',
+  maxWidthClassName = 'max-w-screen-md',
   ...meta
 }) {
   return (
