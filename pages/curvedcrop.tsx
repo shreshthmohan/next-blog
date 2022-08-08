@@ -2,6 +2,7 @@ import { NextPage } from 'next'
 import { useRouter } from 'next/router'
 import { roundedPolygonByCircumRadius } from 'curved-polygon'
 import React, { useState, useRef, useEffect } from 'react'
+import BaseReadingLayout from 'layouts/BaseReadingLayout'
 import { Canvg } from 'canvg'
 import { select } from 'd3-selection'
 import { drag } from 'd3-drag'
@@ -294,156 +295,153 @@ const CurvedCrop: NextPage = () => {
   const imgSrc = imageFile ? URL.createObjectURL(imageFile) : defaultImage
 
   return (
-    <div className="flex font-sans">
-      <main className=" mx-auto my-8 flex  flex-col px-4">
-        <h1 className="mb-2 font-serif text-4xl font-normal text-gray-600">
-          A Geometric Cropping Tool for Twitter profile pictures
-        </h1>
-        <a
-          href="https://github.com/shreshthmohan/next-blog/issues/24"
-          target="_blank"
-          rel="noreferrer"
-          className="mb-2 text-sm"
-        >
-          Report Issue
-        </a>
-
-        <div className="flex flex-wrap justify-center gap-x-4 rounded border border-solid border-gray-300 py-2">
-          <div className="">
-            <svg
-              id="cropped-image-editor"
-              width={svgSide}
-              height={svgSide}
-              viewBox={`0 0 ${svgSide} ${svgSide}`}
-              className={`border border-solid border-gray-300 ${
-                bgDark ? 'bg-gray-900' : 'bg-gray-50'
-              }`}
-              ref={imageEditorRef}
-            >
-              <image
-                className="cursor-grab"
-                ref={imageShapeRef}
-                href={imgSrc}
-                x={imageXPosition}
-                y={imageYPosition}
-                width={svgSide * imageZoom}
-                height={svgSide * imageZoom}
-                clipPath={maskOff ? `url(#${clipPathId})` : undefined}
-                mask={maskOff ? undefined : 'url(#tw-mask)'}
-              ></image>
-              {maskOff && (
-                <clipPath id={clipPathId}>
-                  <path
-                    d={dForPath}
-                    transform={`rotate(${rotate})`}
-                    transform-origin={`${shapeCenter.cx} ${shapeCenter.cy}`}
-                  />
-                </clipPath>
-              )}
-              {!maskOff && (
-                <mask id="tw-mask">
-                  <rect x="0" y="0" width="400" height="400" fill="#333"></rect>
-                  <circle cx="200" cy="200" r="200" fill="#555"></circle>
-                  <path
-                    fill="#fff"
-                    d={dForPath}
-                    transform={`rotate(${rotate})`}
-                    transform-origin={`${shapeCenter.cx} ${shapeCenter.cy}`}
-                    clipPath="url(#for-mask)"
-                  />
-                </mask>
-              )}
-              <clipPath id="for-mask">
-                <circle
-                  cx="200"
-                  cy="200"
-                  r="200"
+    <BaseReadingLayout maxWidthClassName="max-w-screen-xl font-sans">
+      <h1 className="mb-2 font-serif text-xl font-normal text-gray-600 lg:text-3xl">
+        A Geometric Cropping Tool for Twitter profile pictures
+      </h1>
+      <a
+        href="https://github.com/shreshthmohan/next-blog/issues/24"
+        target="_blank"
+        rel="noreferrer"
+        className="mb-2 text-sm"
+      >
+        Report Issue
+      </a>
+      <div className="flex flex-wrap justify-center gap-x-4 rounded border border-solid border-gray-300 p-4">
+        <div className="">
+          <svg
+            id="cropped-image-editor"
+            width={svgSide}
+            height={svgSide}
+            viewBox={`0 0 ${svgSide} ${svgSide}`}
+            className={`border border-solid border-gray-300 ${
+              bgDark ? 'bg-gray-900' : 'bg-gray-50'
+            }`}
+            ref={imageEditorRef}
+          >
+            <image
+              className="cursor-grab"
+              ref={imageShapeRef}
+              href={imgSrc}
+              x={imageXPosition}
+              y={imageYPosition}
+              width={svgSide * imageZoom}
+              height={svgSide * imageZoom}
+              clipPath={maskOff ? `url(#${clipPathId})` : undefined}
+              mask={maskOff ? undefined : 'url(#tw-mask)'}
+            ></image>
+            {maskOff && (
+              <clipPath id={clipPathId}>
+                <path
+                  d={dForPath}
+                  transform={`rotate(${rotate})`}
                   transform-origin={`${shapeCenter.cx} ${shapeCenter.cy}`}
-                  transform={`rotate(${-rotate})`}
-                ></circle>
-              </clipPath>
-            </svg>
-
-            <canvas className="hidden" ref={canvasRef}></canvas>
-            {/* <img height="400" width="400" alt="output image" ref={outputImageRef} /> */}
-            <a className="hidden" ref={imageLinkRef}></a>
-          </div>
-
-          <div className=" flex w-[400px] flex-wrap gap-x-3 gap-y-1 text-sm">
-            <input
-              type="file"
-              accept="image/*"
-              onChange={function (e) {
-                if (e.target.files.length) {
-                  setImageFile(e.target.files[0])
-                }
-              }}
-            />
-            <button
-              onClick={() => {
-                handleChangeStateAndQueryParam('imageZoom', 1)
-                handleChangeStateAndQueryParam('imageXPosition', 0)
-                handleChangeStateAndQueryParam('imageYPosition', 0)
-              }}
-            >
-              {'Reset image zoom & position'}
-            </button>
-            <button
-              onClick={() => {
-                setBgDark(!bgDark)
-              }}
-              title="toggle canvas background to better see your image's position with respect to the circular crop twitter will apply"
-            >
-              Toggle Background
-            </button>
-            <button
-              onClick={() => handleChangeStateAndQueryParam('cropXOffset', 0)}
-            >
-              Reset crop X offset
-            </button>
-            <button
-              onClick={() => handleChangeStateAndQueryParam('cropYOffset', 0)}
-            >
-              Reset crop y offset
-            </button>
-
-            {Object.keys(state).map(k => {
-              return (
-                <NumberRange
-                  label={k}
-                  onChange={e => {
-                    handleChangeStateAndQueryParam(k, e.target.value)
-                  }}
-                  id={`cc-${k}`}
-                  value={state[k]}
-                  rangeLimits={cropAndImageParams[k].limits}
-                  step={cropAndImageParams[k].step}
-                  key={k}
                 />
-              )
-            })}
+              </clipPath>
+            )}
+            {!maskOff && (
+              <mask id="tw-mask">
+                <rect x="0" y="0" width="400" height="400" fill="#333"></rect>
+                <circle cx="200" cy="200" r="200" fill="#555"></circle>
+                <path
+                  fill="#fff"
+                  d={dForPath}
+                  transform={`rotate(${rotate})`}
+                  transform-origin={`${shapeCenter.cx} ${shapeCenter.cy}`}
+                  clipPath="url(#for-mask)"
+                />
+              </mask>
+            )}
+            <clipPath id="for-mask">
+              <circle
+                cx="200"
+                cy="200"
+                r="200"
+                transform-origin={`${shapeCenter.cx} ${shapeCenter.cy}`}
+                transform={`rotate(${-rotate})`}
+              ></circle>
+            </clipPath>
+          </svg>
 
-            <button className="w-full" onClick={handleDownloadImage}>
-              Download image
-            </button>
+          <canvas className="hidden" ref={canvasRef}></canvas>
+          {/* <img height="400" width="400" alt="output image" ref={outputImageRef} /> */}
+          <a className="hidden" ref={imageLinkRef}></a>
+        </div>
+
+        <div className=" flex w-[400px] flex-wrap gap-x-3 gap-y-1 text-sm">
+          <input
+            type="file"
+            accept="image/*"
+            onChange={function (e) {
+              if (e.target.files.length) {
+                setImageFile(e.target.files[0])
+              }
+            }}
+          />
+          <button
+            onClick={() => {
+              handleChangeStateAndQueryParam('imageZoom', 1)
+              handleChangeStateAndQueryParam('imageXPosition', 0)
+              handleChangeStateAndQueryParam('imageYPosition', 0)
+            }}
+          >
+            {'Reset image zoom & position'}
+          </button>
+          <button
+            onClick={() => {
+              setBgDark(!bgDark)
+            }}
+            title="toggle canvas background to better see your image's position with respect to the circular crop twitter will apply"
+          >
+            Toggle Background
+          </button>
+          <button
+            onClick={() => handleChangeStateAndQueryParam('cropXOffset', 0)}
+          >
+            Reset crop X offset
+          </button>
+          <button
+            onClick={() => handleChangeStateAndQueryParam('cropYOffset', 0)}
+          >
+            Reset crop y offset
+          </button>
+
+          {Object.keys(state).map(k => {
+            return (
+              <NumberRange
+                label={k}
+                onChange={e => {
+                  handleChangeStateAndQueryParam(k, e.target.value)
+                }}
+                id={`cc-${k}`}
+                value={state[k]}
+                rangeLimits={cropAndImageParams[k].limits}
+                step={cropAndImageParams[k].step}
+                key={k}
+              />
+            )
+          })}
+
+          <button className="w-full" onClick={handleDownloadImage}>
+            Download image
+          </button>
+        </div>
+      </div>
+      <div className="flex pt-2">
+        {presets.map(p => (
+          <div
+            key={p.name}
+            onClick={() => {
+              Object.keys(p.params).forEach(pp => {
+                handleChangeStateAndQueryParam(pp, p.params[pp])
+              })
+            }}
+          >
+            <CroppedImageSample size="sm" imgSrc={p.previewImage} />
           </div>
-        </div>
-        <div className="flex pt-2">
-          {presets.map(p => (
-            <div
-              key={p.name}
-              onClick={() => {
-                Object.keys(p.params).forEach(pp => {
-                  handleChangeStateAndQueryParam(pp, p.params[pp])
-                })
-              }}
-            >
-              <CroppedImageSample size="sm" imgSrc={p.previewImage} />
-            </div>
-          ))}
-        </div>
-      </main>
-    </div>
+        ))}
+      </div>
+    </BaseReadingLayout>
   )
 }
 
