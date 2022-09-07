@@ -104,9 +104,9 @@ function parseIssue(issue: Issue) {
   if (data.data.slug) {
     slug = data.data.slug
   } else if (data.data.title) {
-    slug = slugify(data.data.title, { remove: /[*+~.()'"!:@]/g })
+    slug = slugify(data.data.title, { remove: /[*+~.,()'"!:@]/g })
   } else {
-    slug = slugify(issue.title, { remove: /[*+~.()'"!:@]/g })
+    slug = slugify(issue.title, { remove: /[*+~.,()'"!:@]/g })
   }
   return {
     content: data.content,
