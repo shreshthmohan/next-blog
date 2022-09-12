@@ -34,10 +34,8 @@ const Home: NextPage = () => {
     <BaseReadingLayout maxWidthClassName="max-w-screen-md">
       <div className="flex flex-col-reverse items-center justify-between py-10 sm:flex-row  ">
         <div className="text-center sm:pr-10 sm:text-left">
-          <h1 className="my-0 text-4xl font-normal text-gray-700 ">
-            Shreshth Mohan
-          </h1>
-          <p className="mt-1 text-lg text-gray-600">
+          <h1 className="my-0 text-4xl font-normal">Shreshth Mohan</h1>
+          <p className="mt-1 text-lg">
             I am a JavaScript developer based in Bangalore, India. I build
             applications and data visualisations for the web.
           </p>
@@ -53,9 +51,7 @@ const Home: NextPage = () => {
         </div>
       </div>
 
-      <h2 className="mb-2 text-2xl font-normal text-gray-600">
-        Data visualizations
-      </h2>
+      <h2 className="mb-2 text-2xl font-normal">Data visualizations</h2>
       <DataVizCard
         title="Horizontal packed bubble"
         description="A force simulation with two modes, combined and split. Also uses Voronoi to implement a layer to improve interaction."
@@ -89,21 +85,19 @@ const Home: NextPage = () => {
       />
 
       <div className="mb-4 rounded border border-solid border-gray-300 px-3 py-2 shadow-sm">
-        <p className="m-0 text-xl leading-tight text-gray-700">
-          See all the charts{' '}
+        <p className="m-0 text-xl leading-tight">
+          See all the{' '}
           <a
             href="https://data-viz-d3.shreshth.dev"
             target="_blank"
             rel="noreferrer"
           >
-            here
+            charts here
           </a>
         </p>
       </div>
 
-      <h2 className="mb-4 pt-12 text-2xl font-normal text-gray-600">
-        Tiny projects
-      </h2>
+      <h2 className="mb-4 pt-12 text-2xl font-normal">Tiny projects</h2>
       <div className="rounded border border-solid border-gray-300 p-3">
         <h3 className="m-0 text-xl font-normal">
           <Link href="/curvedcrop">

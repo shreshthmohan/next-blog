@@ -296,7 +296,7 @@ const CurvedCrop: NextPage = () => {
 
   return (
     <BaseReadingLayout maxWidthClassName="max-w-screen-xl font-sans">
-      <h1 className="mb-2 font-serif text-xl font-normal text-gray-600 lg:text-3xl">
+      <h1 className="mb-2 font-serif text-xl font-normal lg:text-3xl">
         A Geometric Cropping Tool for Twitter profile pictures
       </h1>
       <a

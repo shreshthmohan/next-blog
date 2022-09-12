@@ -10,7 +10,11 @@ function NavLink({ href, text }) {
   return (
     <Link href={href}>
       <a
-        className={`${isActive ? 'text-gray-800 ' : 'text-gray-400 '}
+        className={`${
+          isActive
+            ? 'text-gray-800 dark:text-gray-400 '
+            : 'text-gray-400 dark:text-gray-600'
+        }
            mr-4 text-xl font-normal no-underline decoration-gray-500 underline-offset-2 hover:text-gray-500 hover:underline`}
       >
         {text}

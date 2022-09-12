@@ -16,7 +16,7 @@ export const CroppedImageSample = ({
 
   return (
     <div
-      className={`${sizeData[size].classStr}  m-1  overflow-hidden rounded-full border-2 border-solid border-gray-400`}
+      className={`${sizeData[size].classStr}  m-1  overflow-hidden rounded-full border-2 border-solid border-gray-400 dark:border-gray-700`}
     >
       <Image
         src={imgSrc}

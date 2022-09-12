@@ -16,8 +16,8 @@ export default function Issue(issueData) {
       type="article"
     >
       <article className="mx-auto mb-16 flex w-full max-w-screen-xl flex-col items-start justify-center">
-        <header className="mb-4 w-full border-0 border-b-2 border-solid border-gray-200">
-          <h1 className="mb-1 text-3xl font-normal tracking-tight  text-gray-700 md:text-4xl">
+        <header className="mb-4 w-full border-0 border-b-2 border-solid border-gray-200 dark:border-zinc-800">
+          <h1 className="mb-1 text-3xl font-normal tracking-tight text-gray-700 dark:text-slate-300 md:text-4xl">
             {title}
           </h1>
           <div className="mt-0 mb-1 text-xl text-gray-700">{summary}</div>
