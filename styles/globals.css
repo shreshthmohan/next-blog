@@ -9,7 +9,7 @@
   html,
   body {
     margin: 0px;
-    @apply box-border h-full dark:bg-neutral-900 dark:text-slate-300;
+    @apply box-border h-full;
   }
   *,
   *:before,
@@ -24,18 +24,10 @@
   main {
     @apply md:text-lg;
   }
-
-  a {
-    @apply text-sky-800 no-underline hover:text-sky-600 hover:underline dark:text-sky-500;
-  }
-
-  h1 {
-    @apply text-gray-700 dark:text-slate-300;
-  }
 }
 
 .article-body h2 {
-  @apply font-normal text-gray-800;
+  @apply font-normal;
 }
 
 .article-body h3,
@@ -77,16 +69,16 @@
 
 /* inline code styling*/
 .article-body code {
-  @apply rounded-md bg-gray-100 px-1 text-base dark:bg-[#6e768166];
+  @apply rounded-md border border-solid border-gray-200 px-1 text-base dark:border-gray-600;
 }
 
 /* Multi-line code blocks styling start */
 .article-body pre {
-  @apply overflow-x-auto rounded-md border border-solid border-gray-200 bg-gray-100 px-4 py-2 first-letter:rounded-md dark:border-gray-700 dark:bg-[#161b22];
+  @apply overflow-x-auto rounded-md border border-solid border-gray-200 px-4 py-2 first-letter:rounded-md dark:border-gray-700;
 }
 
 .article-body pre code {
-  @apply bg-transparent p-0 text-zinc-800 dark:text-slate-300;
+  @apply border-0 bg-transparent p-0;
 }
 
 .article-body pre code .token.keyword {
