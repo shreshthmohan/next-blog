@@ -49,6 +49,7 @@ export default function MetaHead(props: {
       {meta.date && (
         <meta property="article:published_time" content={meta.date} />
       )}
+      <meta name="color-scheme" content="dark light" />
     </Head>
   )
 }
