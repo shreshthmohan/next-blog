@@ -20,7 +20,7 @@ export default function Issue(issueData) {
           <h1 className="mb-1 text-3xl font-normal tracking-tight text-gray-700 dark:text-slate-300 md:text-4xl">
             {title}
           </h1>
-          <div className="mt-0 mb-1 text-xl text-gray-700">{summary}</div>
+          <div className="mt-0 mb-1 text-xl">{summary}</div>
         </header>
         <div className="article-body mt-4 w-full max-w-none">
           <MDXRemote {...content} />
