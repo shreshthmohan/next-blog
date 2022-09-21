@@ -21,8 +21,8 @@
     @apply h-full;
   }
 
-  main {
-    @apply md:text-lg;
+  h2 {
+    @apply mt-16;
   }
 }
 
