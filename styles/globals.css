@@ -77,7 +77,7 @@
 
 /* inline code styling*/
 .article-body code {
-  @apply rounded-md bg-gray-100 px-1 text-base dark:bg-[#6e768166];
+  @apply rounded-md border border-solid border-gray-200 px-1 dark:border-gray-600;
 }
 
 /* Multi-line code blocks styling start */
