@@ -9,7 +9,7 @@
   html,
   body {
     margin: 0px;
-    @apply box-border h-full;
+    @apply box-border h-full text-zinc-800 dark:text-slate-300;
   }
   *,
   *:before,
@@ -21,8 +21,21 @@
     @apply h-full;
   }
 
+  main {
+    font-size: 1.1rem;
+    line-height: 1.55rem;
+  }
+
   h2 {
     @apply mt-16;
+  }
+
+  blockquote {
+    @apply m-0 border-0 border-l-4 border-solid border-gray-200 px-6 py-2 dark:border-neutral-700;
+  }
+
+  blockquote p {
+    @apply m-0;
   }
 }
 
@@ -69,32 +82,72 @@
 
 /* inline code styling*/
 .article-body code {
-  @apply rounded-md border border-solid border-gray-200 px-1 dark:border-gray-600;
+  @apply rounded-md bg-gray-400/20 px-1 dark:bg-gray-500/40;
 }
 
 /* Multi-line code blocks styling start */
 .article-body pre {
-  @apply overflow-x-auto rounded-md border border-solid border-gray-200 px-4 py-2 first-letter:rounded-md dark:border-gray-700;
+  @apply overflow-x-auto  rounded-md border border-solid border-gray-200 bg-slate-50 px-4 py-2 first-letter:rounded-md dark:border-gray-700 dark:bg-gray-900;
 }
 
 .article-body pre code {
   @apply border-0 bg-transparent p-0;
 }
 
+.article-body pre code .token.punctuation {
+  @apply text-zinc-800 dark:text-slate-300;
+}
+
+.article-body pre code .token.tag {
+  @apply text-green-800 dark:text-green-300;
+}
+
+.article-body pre code .token.selector {
+  @apply text-green-800 dark:text-green-300;
+}
+
+.article-body pre code .token.hexcode.color {
+  @apply text-sky-900 dark:text-blue-200;
+}
+
+.article-body pre code .token.class {
+  @apply text-blue-800 dark:text-sky-300;
+}
+
+.article-body pre code .token.attr-name {
+  @apply text-blue-800 dark:text-sky-300;
+}
+
+.article-body pre code .token.attr-value {
+  @apply text-sky-900 dark:text-blue-200;
+}
+
+.article-body pre code .token.pseudo-class {
+  @apply text-blue-800 dark:text-sky-300;
+}
+
+.article-body pre code .token.property {
+  @apply text-blue-800 dark:text-sky-300;
+}
+
+.article-body pre code .token.rule {
+  @apply text-red-600 dark:text-red-400;
+}
+
 .article-body pre code .token.keyword {
-  @apply text-violet-600;
+  @apply text-red-600 dark:text-red-400;
 }
 
 .article-body pre code .token.keyword.module {
-  @apply text-red-600;
+  @apply text-violet-600 dark:text-purple-300;
 }
 
 .article-body pre code .token.class-name {
-  @apply text-amber-800;
+  @apply text-amber-800 dark:text-orange-400;
 }
 
 .article-body pre code .token.operator {
-  @apply text-sky-800;
+  @apply text-blue-800 dark:text-sky-300;
 }
 .article-body pre code .token.constant {
   @apply text-sky-700;
@@ -117,13 +170,13 @@
 }
 
 .article-body pre code .token.property-access {
-  @apply text-sky-700;
+  @apply text-blue-800 dark:text-sky-300;
 }
 
 .article-body pre code .token.function {
-  @apply text-violet-600;
+  @apply text-violet-600 dark:text-purple-300;
 }
 
 .article-body pre code .token.control-flow {
-  @apply text-red-600;
+  @apply text-red-600 dark:text-red-400;
 }
