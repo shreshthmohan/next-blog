@@ -109,8 +109,6 @@ function parseIssue(issue: Issue) {
     slug = slugify(issue.title, { remove: /[*+~.,()'"!:@]/g })
   }
 
-  console.log('issue id:', issue)
-
   return {
     content: data.content,
     slug: slug.toLowerCase(),
