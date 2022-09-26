@@ -40,6 +40,9 @@ export async function listBlogposts() {
   const authheader = process.env.GH_TOKEN && {
     Authorization: `token ${process.env.GH_TOKEN}`,
   }
+
+  console.log('labels to publish:', siteWide.labelsToPublish.join(','))
+
   do {
     const res = await fetch(
       next ??
@@ -50,6 +53,7 @@ export async function listBlogposts() {
         headers: authheader,
       },
     )
+    // TODO: comma-separated value apply an AND operation to the the list of labels
 
     const result = await res.json()
     if (res.status > 400) {

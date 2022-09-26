@@ -11,5 +11,6 @@ export const siteWide = {
     'A site featuring projects and content on web development and data visualisation. d3.js, SVG, JavaScript, React, HTML, CSS',
   defaultImagePathname: '/images/banner.jpg', // for default og:image, twitter:image
   githubUserRepo: process.env.GH_USER_REPO, // 'shreshthmohan/next-blog',
-  labelsToPublish: ['published', 'draft'], // github issues marked with these labels will be published to the blog
+  labelsToPublish: ['draft'], // github issues marked with these labels will be published to the blog
+  // , 'published']
 }
