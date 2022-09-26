@@ -43,8 +43,9 @@ export async function listBlogposts() {
   do {
     const res = await fetch(
       next ??
-        `https://api.github.com/repos/${GH_USER_REPO}/issues?state=all&per_page=100&labels=draft`,
-      // `https://api.github.com/repos/${GH_USER_REPO}/issues?state=all&per_page=100&labels=draft,published`,
+        `https://api.github.com/repos/${GH_USER_REPO}/issues?state=all&per_page=100&labels=${siteWide.labelsToPublish.join(
+          ',',
+        )}`,
       {
         headers: authheader,
       },
