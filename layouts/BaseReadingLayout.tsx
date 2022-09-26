@@ -33,7 +33,7 @@ export default function BaseReadingLayout({
       <MetaHead {...meta} />
       <div className="flex min-h-full flex-col justify-between">
         <div
-          className={`mx-auto ${maxWidthClassName} px-3 pt-4 sm:pt-6 md:px-0`}
+          className={`mx-auto w-full ${maxWidthClassName} px-3 pt-4 sm:pt-6 md:px-0`}
         >
           <header className="relative">
             <a className="skip-to-content" href="#main-content">
@@ -44,11 +44,6 @@ export default function BaseReadingLayout({
                 {/* TODO test a11y */}
                 <NavLink href="/" text="Home" />
                 <NavLink href="/blog" text="Blog" />
-                {/* <NavLink href="/about" text="About + Now" /> */}
-                {/* blog */}
-                {/* projects */}
-                {/* snippets/components */}
-                {/* tools/uses */}
               </span>
             </nav>
           </header>
