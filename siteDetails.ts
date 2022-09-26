@@ -10,7 +10,7 @@ export const siteWide = {
   description:
     'A site featuring projects and content on web development and data visualisation. d3.js, SVG, JavaScript, React, HTML, CSS',
   defaultImagePathname: '/images/banner.jpg', // for default og:image, twitter:image
-  githubUserRepo: process.env.GH_USER_REPO, // 'shreshthmohan/next-blog',
+  githubUserRepo: process.env.NEXT_PUBLIC_GH_USER_REPO, // 'shreshthmohan/next-blog',
   // Intentionally not implementing a list of labels to publish to keep thing simple
   // One can always manually label all issues to be published
   labelToPublish: 'draft', // github issues marked with this label will be published to the blog
