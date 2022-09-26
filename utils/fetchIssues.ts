@@ -41,19 +41,14 @@ export async function listBlogposts() {
     Authorization: `token ${process.env.GH_TOKEN}`,
   }
 
-  console.log('labels to publish:', siteWide.labelsToPublish.join(','))
-
   do {
     const res = await fetch(
       next ??
-        `https://api.github.com/repos/${GH_USER_REPO}/issues?state=all&per_page=100&labels=${siteWide.labelsToPublish.join(
-          ',',
-        )}`,
+        `https://api.github.com/repos/${GH_USER_REPO}/issues?state=all&per_page=100&labels=${siteWide.labelToPublish}`,
       {
         headers: authheader,
       },
     )
-    // TODO: comma-separated value apply an AND operation to the the list of labels
 
     const result = await res.json()
     if (res.status > 400) {
@@ -126,9 +121,6 @@ function parseIssue(issue: Issue) {
       ...data.data,
       id: issue.id,
       author: issue.user.login,
-      // commentsUrl: issue.comments_url,
-      // reactions: issue.reactions,
     },
-    // ...data,
   }
 }
