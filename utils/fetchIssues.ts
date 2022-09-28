@@ -5,6 +5,7 @@ import rehypeCodeTitles from 'rehype-code-titles'
 import rehypePrism from 'rehype-prism-plus'
 import rehypeSlug from 'rehype-slug'
 import remarkGfm from 'remark-gfm'
+import rehypeColorChip from './rehype-color-chip/index'
 
 import { serialize } from 'next-mdx-remote/serialize'
 
@@ -79,6 +80,7 @@ export async function getBlogpost(slug: string) {
       rehypePlugins: [
         rehypeSlug,
         rehypeCodeTitles,
+        rehypeColorChip,
         rehypePrism,
         [
           rehypeAutolinkHeadings,

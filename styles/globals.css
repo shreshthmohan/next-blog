@@ -39,6 +39,10 @@
   }
 }
 
+.gfm-color-chip {
+  @apply ml-0.5 inline-block h-2.5 w-2.5 rounded-full border border-solid border-gray-600;
+}
+
 .article-body h2 {
   @apply font-normal;
 }
