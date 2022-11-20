@@ -3,7 +3,7 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 import { setAuthCookies } from 'next-firebase-auth'
 import initAuth from '../../initAuth' // the module you created above
 
-type Data = {
+export type Data = {
   success?: boolean
   error?: string
 }

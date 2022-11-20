@@ -13,7 +13,7 @@ const initAuth = () => {
     onLogoutRequestError: err => {
       console.error(err)
     },
-    firebaseAuthEmulatorHost: 'localhost:9099',
+    // firebaseAuthEmulatorHost: 'localhost:9099',
     firebaseAdminInitConfig: {
       credential: {
         projectId: process.env.FIREBASE_PROJECT_ID,
@@ -25,6 +25,7 @@ const initAuth = () => {
     },
     // Use application default credentials (takes precedence over firebaseAdminInitConfig if set)
     // useFirebaseAdminDefaultCredential: true,
+
     firebaseClientInitConfig: {
       apiKey: process.env.FIREBASE_API_KEY,
       authDomain: process.env.FIREBASE_AUTH_DOMAIN,
