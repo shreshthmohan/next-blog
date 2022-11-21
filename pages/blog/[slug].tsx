@@ -7,7 +7,7 @@ const { siteName } = siteWide
 
 export default function Issue(issueData) {
   const { content, metaData } = issueData
-  const { title, summary, updated_at, created_at } = metaData
+  const { title, summary, updated_at, created_at, tags } = metaData
   return (
     <BaseReadingLayout
       title={`${title} – ${siteName}`}
@@ -28,8 +28,8 @@ export default function Issue(issueData) {
             </div>
           </div>
           <div className="mt-0 mb-1 text-xl">{summary}</div>
-          {metaData.tags &&
-            metaData.tags.map(t => {
+          {tags &&
+            tags.map(t => {
               return (
                 <span
                   className="mr-2 rounded border border-solid border-gray-300 bg-gray-100 py-0.5 px-1 text-sm dark:border-gray-600 dark:bg-gray-800 "

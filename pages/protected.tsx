@@ -17,7 +17,8 @@ const styles = {
   },
 }
 
-const Demo = ({ favoriteColor }) => {
+const Demo = props => {
+  const { favoriteColor } = props
   const AuthUser = useAuthUser()
   return (
     <div>
