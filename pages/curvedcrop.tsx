@@ -335,7 +335,9 @@ const CurvedCrop: NextPage = () => {
                 <path
                   d={dForPath}
                   transform={`rotate(${rotate})`}
-                  transform-origin={`${shapeCenter.cx} ${shapeCenter.cy}`}
+                  style={{
+                    transformOrigin: `${shapeCenter.cx} ${shapeCenter.cy}`,
+                  }}
                 />
               </clipPath>
             )}
@@ -347,7 +349,9 @@ const CurvedCrop: NextPage = () => {
                   fill="#fff"
                   d={dForPath}
                   transform={`rotate(${rotate})`}
-                  transform-origin={`${shapeCenter.cx} ${shapeCenter.cy}`}
+                  style={{
+                    transformOrigin: `${shapeCenter.cx} ${shapeCenter.cy}`,
+                  }}
                   clipPath="url(#for-mask)"
                 />
               </mask>
@@ -357,7 +361,9 @@ const CurvedCrop: NextPage = () => {
                 cx="200"
                 cy="200"
                 r="200"
-                transform-origin={`${shapeCenter.cx} ${shapeCenter.cy}`}
+                style={{
+                  transformOrigin: `${shapeCenter.cx} ${shapeCenter.cy}`,
+                }}
                 transform={`rotate(${-rotate})`}
               ></circle>
             </clipPath>
