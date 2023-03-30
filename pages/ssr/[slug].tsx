@@ -2,10 +2,28 @@ import { MDXRemote } from 'next-mdx-remote'
 import BaseReadingLayout from 'layouts/BaseReadingLayout'
 import { getBlogpost, listBlogposts } from 'utils/fetchIssues'
 import { siteWide } from 'siteDetails'
+import {
+  useAuthUser,
+  withAuthUser,
+  withAuthUserTokenSSR,
+  AuthAction,
+} from 'next-firebase-auth'
 
-const { siteName } = siteWide
+// const { siteName } = siteWide
 
-export default function Issue(issueData) {
+function Issue(props) {
+  return (
+    <div>
+      <textarea
+        rows={20}
+        cols={80}
+        defaultValue={JSON.stringify(props, null, 2)}
+      ></textarea>
+      <div>{Object.keys(props.content)}</div>
+    </div>
+  )
+
+  /*
   const { content, metaData } = issueData
   const { title, summary, updated_at, created_at, tags } = metaData
   return (
@@ -45,20 +63,57 @@ export default function Issue(issueData) {
         </div>
       </article>
     </BaseReadingLayout>
-  )
+  ) */
 }
 
-export async function getStaticPaths() {
-  const allIssues = await listBlogposts()
+export const getServerSideProps = withAuthUserTokenSSR()(async props => {
+  const { query, resolvedUrl, params, AuthUser } = props
+  const AuthUserCopy = {}
+  const AuthUserEmptyKeys = []
+
+  const isUserAuthed: Boolean = !!(AuthUser?.email && AuthUser?.id)
+
+  Object.keys(AuthUser || {}).forEach(k => {
+    const value = AuthUser[k]
+    const omitValuesOfType = ['undefined', 'function']
+    if (!omitValuesOfType.includes(typeof value)) {
+      AuthUserCopy[k] = value
+    } else {
+      AuthUserEmptyKeys.push(k)
+    }
+  })
+
+  const issue = await getBlogpost(params.slug as string)
+
+  // If user is not Authed, only send some parts of the content
+  // Post title, summary, tags, categories
+
+  let content
+
+  if (isUserAuthed) {
+    content = { ...issue }
+  } else {
+    content = { slug: issue.slug, metaData: issue.metaData }
+  }
+  console.log({ AuthUserEmptyKeys })
+
+  //   const issue = await getBlogpost(params.slug)
 
   return {
-    paths: allIssues.map(i => ({ params: { slug: i.slug } })),
-    fallback: false,
+    props: {
+      query,
+      resolvedUrl,
+      params,
+      AuthUser: AuthUserCopy,
+      content,
+    },
+    // props: { content: { ...issue } },
   }
-}
+})
 
-export async function getStaticProps({ params }) {
-  const issue = await getBlogpost(params.slug)
+// ({ params }) {
 
-  return { props: { ...issue } }
-}
+//   return { props: { ...issue } }
+// }
+
+export default withAuthUser()(Issue)
