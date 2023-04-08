@@ -2,8 +2,8 @@
   "name": "next-blog",
   "version": "0.1.0",
   "private": true,
-  "engines" : { 
-    "node" : ">=16.0.0 <17.0.0"
+  "engines": {
+    "node": ">=16.0.0 <17.0.0"
   },
   "scripts": {
     "dev": "next dev",
@@ -21,6 +21,7 @@
     "@types/react": "17.0.30"
   },
   "dependencies": {
+    "@next/swc-linux-x64-musl": "12.1.0",
     "autoprefixer": "^10.4.2",
     "canvg": "^4.0.0",
     "curved-polygon": "^0.0.2",
