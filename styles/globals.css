@@ -89,9 +89,17 @@
   @apply rounded-md bg-gray-400/20 px-1 dark:bg-gray-500/40;
 }
 
+.rehype-code-title {
+  @apply rounded-t-md border border-b-0 border-solid border-gray-200 bg-slate-100  px-4 py-1 dark:border-gray-700 dark:bg-gray-800;
+}
+
 /* Multi-line code blocks styling start */
 .article-body pre {
-  @apply overflow-x-auto  rounded-md border border-solid border-gray-200 bg-slate-50 px-4 py-2 first-letter:rounded-md dark:border-gray-700 dark:bg-gray-900;
+  @apply mt-0 overflow-x-auto rounded-md border border-solid border-gray-200 bg-slate-50 px-4 py-2 first-letter:rounded-md dark:border-gray-700 dark:bg-gray-900;
+}
+
+.rehype-code-title + pre {
+  @apply rounded-t-none;
 }
 
 .article-body pre code {
