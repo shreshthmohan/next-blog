@@ -50,6 +50,7 @@
     "unist-util-visit": "^4.1.1"
   },
   "devDependencies": {
+    "@tailwindcss/typography": "^0.5.10",
     "@types/d3-drag": "^3.0.1",
     "@types/d3-selection": "^3.0.2",
     "@types/d3-zoom": "^3.0.1",

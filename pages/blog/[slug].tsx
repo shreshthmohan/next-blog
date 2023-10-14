@@ -26,9 +26,9 @@ export default function Issue(issueData) {
               <a href={metaData.issueUrl}>Source</a>
             </div>
           </div>
-          <div className="mt-0 mb-1 text-xl">{summary}</div>
+          <div className="mb-1 mt-0 text-xl">{summary}</div>
         </header>
-        <div className="article-body mt-4 w-full max-w-none">
+        <div className="article-body mt-4 w-full max-w-none prose-img:max-w-full">
           <MDXRemote {...content} />
         </div>
       </article>
