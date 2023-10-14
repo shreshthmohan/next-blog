@@ -1,5 +1,4 @@
-// Quite a bit if the code here is copied from
-// https://github.com/sw-yx/swyxkit/commit/3a309d95275ae32bd311d71838ca36858b222eb6#diff-e52d7cbb53c2deb88bfe15cfc210a387853cf9f243172b6e2844bb88bc9743a3
+import { GithubBlog } from '@rena.to/github-blog'
 import rehypeAutolinkHeadings from 'rehype-autolink-headings'
 import rehypeCodeTitles from 'rehype-code-titles'
 import rehypePrism from 'rehype-prism-plus'
@@ -10,64 +9,24 @@ import rehypeColorChips from 'rehype-color-chips'
 import { serialize } from 'next-mdx-remote/serialize'
 
 import grayMatter from 'gray-matter'
-import fetch from 'node-fetch'
-import parse from 'parse-link-header'
+// import fetch from 'node-fetch'
+// import parse from 'parse-link-header'
 import slugify from 'slugify'
 
-import { siteWide } from 'siteDetails'
+// import { siteWide } from 'siteDetails'
 
-const GH_USER_REPO = siteWide.githubUserRepo
-const GH_OWNER_USER = GH_USER_REPO.split('/')[0]
-
-type Issue = {
-  body: string
-  title: string
-  html_url: string
-  created_at: string
-  updated_at: string
-  id: number
-  user: {
-    login: String
-  }
-}
-
-// const publishedTag =
-// let etag = null // todo - implmement etag header
-
+const blog = new GithubBlog({
+  repo: process.env.GH_USER_REPO, // e.g.: "renatorib/posts"
+  token: process.env.GH_TOKEN, // your github token
+})
 export async function listBlogposts() {
-  let allBlogposts = [] // reset to zero - make sure to handle this better when doing etags or cache restore
-  let next = null
-  let limit = 0 // just a failsafe against infinite loop - feel free to remove
-  const authheader = process.env.GH_TOKEN && {
-    Authorization: `token ${process.env.GH_TOKEN}`,
-  }
+  const posts = await blog.getPosts({ pager: { first: 10 } })
 
-  do {
-    const res = await fetch(
-      next ??
-        `https://api.github.com/repos/${GH_USER_REPO}/issues?state=all&per_page=100&labels=${siteWide.labelToPublish}`,
-      {
-        headers: authheader,
-      },
-    )
+  return posts.edges.map(({ post }) => {
+    const parsedPost = parseIssue(post)
 
-    const result = await res.json()
-    if (res.status > 400) {
-      const err = result as { message?: string }
-      throw new Error(
-        res.status + ' ' + res.statusText + '\n' + err && err.message,
-      )
-    }
-    const issues = result as Issue[]
-    issues
-      .filter(d => d.user.login === GH_OWNER_USER)
-      .forEach(issue => {
-        allBlogposts.push(parseIssue(issue))
-      })
-    const headers = parse(res.headers.get('Link'))
-    next = headers && headers.next
-  } while (next && limit++ < 1000) // just a failsafe against infinite loop - feel free to remove
-  return allBlogposts
+    return parsedPost
+  })
 }
 
 export async function getBlogpost(slug: string) {
@@ -99,7 +58,7 @@ export async function getBlogpost(slug: string) {
   return { ...blogpost, content }
 }
 
-function parseIssue(issue: Issue) {
+function parseIssue(issue) {
   const src = issue.body
 
   const data = grayMatter(src ?? 'No content')
@@ -112,17 +71,20 @@ function parseIssue(issue: Issue) {
     slug = slugify(issue.title, { remove: /[*+~.,()'"!:@]/g })
   }
 
+  // console.log(issue)
+
   return {
     content: data.content,
     slug: slug.toLowerCase(),
     metaData: {
-      issueUrl: issue.html_url,
+      issueUrl: issue.url,
       title: issue.title,
-      created_at: issue.created_at,
-      updated_at: issue.updated_at,
+      created_at: issue.createdAt,
+      updated_at: issue.updatedAt,
       ...data.data,
       id: issue.id,
-      author: issue.user.login,
+
+      author: issue.author.login,
     },
   }
 }

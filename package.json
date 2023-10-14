@@ -21,6 +21,7 @@
     "@types/react": "17.0.30"
   },
   "dependencies": {
+    "@rena.to/github-blog": "^0.4.2",
     "autoprefixer": "^10.4.2",
     "canvg": "^4.0.0",
     "curved-polygon": "^0.0.2",
