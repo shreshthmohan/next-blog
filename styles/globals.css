@@ -37,6 +37,10 @@
   blockquote p {
     @apply m-0;
   }
+
+  kbd {
+    @apply inline-block whitespace-nowrap rounded border border-solid border-neutral-400 bg-gray-100 px-1 font-semibold shadow dark:border-neutral-600 dark:bg-gray-800;
+  }
 }
 
 .gfm-color-chip {
