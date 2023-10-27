@@ -29,7 +29,7 @@ export default function BaseReadingLayout({
   ...meta
 }) {
   return (
-    <div className="h-full font-serif">
+    <div className="h-full font-serif dark:bg-[#1f2124]">
       <MetaHead {...meta} />
       <div className="flex min-h-full flex-col justify-between">
         <div
@@ -48,7 +48,7 @@ export default function BaseReadingLayout({
             </nav>
           </header>
 
-          <main id="main-content" className="md:pt-10 md:pb-24">
+          <main id="main-content" className="md:pb-24 md:pt-10">
             {children}
           </main>
         </div>
