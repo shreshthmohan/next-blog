@@ -29,7 +29,7 @@ export default function BaseReadingLayout({
   ...meta
 }) {
   return (
-    <div className="h-full font-serif dark:bg-[#1f2124]">
+    <div className="font-serif dark:bg-[#1f2124]">
       <MetaHead {...meta} />
       <div className="flex min-h-full flex-col justify-between">
         <div
