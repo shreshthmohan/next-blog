@@ -44,7 +44,7 @@ export async function listBlogposts() {
 
   do {
     const res = await fetch(
-      next ??
+      next?.url ??
         `https://api.github.com/repos/${GH_USER_REPO}/issues?state=all&per_page=100`,
       {
         headers: authheader,
@@ -62,8 +62,8 @@ export async function listBlogposts() {
     issues
       .filter(d => d.user.login === GH_OWNER_USER)
       // keep issues with the tag "status:published"
-      // .filter(d => d.labels.some(l => l.name === 'status:published'))
-      .filter(d => d.labels.some(l => l.name === 'draft'))
+      .filter(d => d.labels.some(l => l.name === 'status:published'))
+      // .filter(d => d.labels.some(l => l.name === 'draft'))
       .forEach(issue => {
         allBlogposts.push({ ...parseIssue(issue), issue })
       })
@@ -96,8 +96,8 @@ export async function listCategories() {
 
 export async function listBlogpostsOfCategory(category: string) {
   const allBlogposts = await listBlogposts()
-  const blogpostsOfCategory = allBlogposts.filter(post => {
-    return post.labels.some(labelObj => {
+  const blogpostsOfCategory = allBlogposts.filter(({ issue }) => {
+    return issue.labels.some(labelObj => {
       const label = labelObj.name as string
       if (label.startsWith('category:')) {
         const cat = label.split(':')[1]

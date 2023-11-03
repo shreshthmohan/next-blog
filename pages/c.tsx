@@ -18,7 +18,7 @@ const CategoryList = props => {
       <ul>
         {props.allCategories.map(cat => (
           <li key={cat}>
-            <Link href={`/blog/${cat}`}>
+            <Link href={`/blog/c/${cat}`}>
               <a>{cat}</a>
             </Link>
           </li>
@@ -32,7 +32,6 @@ export default CategoryList
 
 export async function getStaticProps() {
   const allCategories = await listCategories()
-  console.log('allCategories', allCategories)
 
   return { props: { allCategories } }
 }
