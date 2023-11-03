@@ -18,7 +18,7 @@ const IssueList: NextPage<{
       <h2 className="font-mornal text-2xl font-normal md:text-3xl">
         Categories
       </h2>
-      <p className="prose pt-2">
+      <p className="pt-2 ">
         {props.allCategories.map(cat => (
           <React.Fragment key={cat}>
             <Link href={`/c/${cat}`}>
@@ -31,7 +31,7 @@ const IssueList: NextPage<{
       </p>
 
       <hr className="my-8" />
-      <div className="prose">
+      <div className="">
         {props.issueList.map(({ id, slug: issueSlug, title, updated_at }) => (
           <div
             key={id}
