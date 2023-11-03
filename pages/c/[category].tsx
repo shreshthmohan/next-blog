@@ -7,7 +7,7 @@ import BaseReadingLayout from 'layouts/BaseReadingLayout'
 export default function PostsOfCategory(props) {
   return (
     <BaseReadingLayout maxWidthClassName="max-w-screen-md">
-      <h1 className="text-3xl font-normal tracking-tight md:text-4xl">
+      <h1 className="pb-4 text-3xl font-normal tracking-tight md:text-4xl">
         Everything related to {props.category}
       </h1>
       {props.allPostsOfCategory.map(({ slug: issueSlug, metaData }) => {
@@ -17,7 +17,7 @@ export default function PostsOfCategory(props) {
             key={id}
             className="mb-6 w-full border-0 border-b border-solid border-gray-200 dark:border-zinc-800"
           >
-            <Link href={`/blog/${issueSlug}`}>
+            <Link href={`/${issueSlug}`}>
               <a className="text-xl">{title}</a>
             </Link>
             <time

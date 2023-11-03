@@ -1,12 +1,17 @@
 import { MDXRemote } from 'next-mdx-remote'
 import BaseReadingLayout from 'layouts/BaseReadingLayout'
-import { getBlogpost, listBlogposts } from 'utils/fetchIssues'
+import {
+  extractCategoryNamesFromIssue,
+  getBlogpost,
+  listBlogposts,
+} from 'utils/fetchIssues'
 import { siteWide } from 'siteDetails'
+import Link from 'next/link'
 
 const { siteName } = siteWide
 
 export default function Issue(issueData) {
-  const { content, metaData } = issueData
+  const { content, metaData, categories } = issueData
   const { title, summary, updated_at, created_at } = metaData
   return (
     <BaseReadingLayout
@@ -25,6 +30,13 @@ export default function Issue(issueData) {
               <span>{metaData.author}</span>
               <a href={metaData.issueUrl}>Source</a>
             </div>
+          </div>
+          <div className="flex justify-end pt-1">
+            {categories.map(cat => (
+              <Link key={cat} href={`/c/${cat}`}>
+                <a className="text-sm">{cat}</a>
+              </Link>
+            ))}
           </div>
           <div className="mb-1 mt-0 text-xl">{summary}</div>
         </header>
@@ -48,5 +60,7 @@ export async function getStaticPaths() {
 export async function getStaticProps({ params }) {
   const issue = await getBlogpost(params.slug)
 
-  return { props: { ...issue } }
+  const categories = extractCategoryNamesFromIssue(issue.issue)
+
+  return { props: { ...issue, categories } }
 }

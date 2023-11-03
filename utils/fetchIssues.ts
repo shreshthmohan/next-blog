@@ -111,6 +111,18 @@ export async function listBlogpostsOfCategory(category: string) {
   return blogpostsOfCategory
 }
 
+export function extractCategoryNamesFromIssue(issue: Issue) {
+  return issue.labels
+    .filter(labelObj => {
+      const label = labelObj.name as string
+      return label.startsWith('category:')
+    })
+    .map(labelObj => {
+      const label = labelObj.name as string
+      return label.split(':')[1]
+    })
+}
+
 export async function getBlogpost(slug: string) {
   const allBlogposts = await listBlogposts()
   // find the blogpost that matches this slug

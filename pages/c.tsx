@@ -18,7 +18,7 @@ const CategoryList = props => {
       <ul>
         {props.allCategories.map(cat => (
           <li key={cat}>
-            <Link href={`/blog/c/${cat}`}>
+            <Link href={`/c/${cat}`}>
               <a>{cat}</a>
             </Link>
           </li>
