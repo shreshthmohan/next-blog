@@ -19,12 +19,15 @@ import { siteWide } from 'siteDetails'
 const GH_USER_REPO = siteWide.githubUserRepo
 const GH_OWNER_USER = GH_USER_REPO.split('/')[0]
 
+type IssueLabel = { name: string }
+
 type Issue = {
   body: string
   title: string
   html_url: string
   created_at: string
   updated_at: string
+  labels: IssueLabel[]
   id: number
   user: {
     login: String
@@ -44,8 +47,8 @@ export async function listBlogposts() {
 
   do {
     const res = await fetch(
-      next ??
-        `https://api.github.com/repos/${GH_USER_REPO}/issues?state=all&per_page=100&labels=${siteWide.labelToPublish}`,
+      next?.url ??
+        `https://api.github.com/repos/${GH_USER_REPO}/issues?state=all&per_page=100`,
       {
         headers: authheader,
       },
@@ -61,13 +64,63 @@ export async function listBlogposts() {
     const issues = result as Issue[]
     issues
       .filter(d => d.user.login === GH_OWNER_USER)
+      // keep issues with the tag "status:published"
+      .filter(d => d.labels.some(l => l.name === 'status:published'))
+      // .filter(d => d.labels.some(l => l.name === 'draft'))
       .forEach(issue => {
-        allBlogposts.push(parseIssue(issue))
+        allBlogposts.push({ ...parseIssue(issue), issue })
       })
     const headers = parse(res.headers.get('Link'))
     next = headers && headers.next
   } while (next && limit++ < 1000) // just a failsafe against infinite loop - feel free to remove
   return allBlogposts
+}
+
+// list all categories
+export async function listCategories() {
+  const allBlogposts = await listBlogposts()
+  const categories = allBlogposts.reduce((acc, { issue }) => {
+    const post = issue
+    console.log('post.labels', post.labels)
+    post.labels.forEach(labelObj => {
+      const label = labelObj.name as string
+      if (label.startsWith('category:')) {
+        const cat = label.split(':')[1]
+        if (!acc.includes(cat)) {
+          acc.push(cat)
+        }
+      }
+    })
+    return acc
+  }, [] as string[])
+  console.log('categories', categories)
+  return categories
+}
+
+export async function listBlogpostsOfCategory(category: string) {
+  const allBlogposts = await listBlogposts()
+  const blogpostsOfCategory = allBlogposts.filter(({ issue }) => {
+    return issue.labels.some(labelObj => {
+      const label = labelObj.name as string
+      if (label.startsWith('category:')) {
+        const cat = label.split(':')[1]
+        return cat === category
+      }
+    })
+  })
+  return blogpostsOfCategory
+}
+
+export function extractCategoryNamesFromIssue(issue: Issue) {
+  return issue.labels
+    .filter(labelObj => {
+      const label = labelObj.name as string
+      return label.startsWith('category:')
+    })
+    .map(labelObj => {
+      const label = labelObj.name as string
+      return label.split(':')[1]
+    })
 }
 
 export async function getBlogpost(slug: string) {

@@ -29,9 +29,9 @@ export default function BaseReadingLayout({
   ...meta
 }) {
   return (
-    <div className="font-serif dark:bg-[#1f2124]">
+    <div className="bg-[#fefbf4] font-serif dark:bg-[#1f2124]">
       <MetaHead {...meta} />
-      <div className="flex min-h-full flex-col justify-between">
+      <div className="flex min-h-screen flex-col justify-between">
         <div
           className={`mx-auto w-full ${maxWidthClassName} px-3 pt-4 sm:pt-6 md:px-0`}
         >
@@ -43,7 +43,7 @@ export default function BaseReadingLayout({
               <span>
                 {/* TODO test a11y */}
                 <NavLink href="/" text="Home" />
-                <NavLink href="/blog" text="Blog" />
+                <NavLink href="/b" text="Blog" />
               </span>
             </nav>
           </header>

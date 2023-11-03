@@ -41,6 +41,10 @@
   kbd {
     @apply inline-block whitespace-nowrap rounded border border-solid border-neutral-400 bg-gray-100 px-1 font-semibold shadow dark:border-neutral-600 dark:bg-gray-800;
   }
+
+  a {
+    @apply underline hover:text-lime-700 dark:hover:text-lime-200;
+  }
 }
 
 .gfm-color-chip {
