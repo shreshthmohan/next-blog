@@ -20,7 +20,7 @@ export default function Issue(issueData) {
       date={updated_at || created_at}
       type="article"
     >
-      <article className="prose mx-auto mb-16 flex w-full max-w-screen-xl flex-col items-start justify-center dark:prose-invert">
+      <article className="mx-auto mb-16 flex w-full max-w-screen-xl flex-col items-start justify-center ">
         <header className="mb-4 w-full ">
           <div className="border-0 border-b-2 border-solid border-gray-200 pb-1 dark:border-zinc-800">
             <h1 className="mb-4  text-4xl font-normal tracking-tight text-gray-700 dark:text-slate-300">
