@@ -1,4 +1,4 @@
-// Quite a bit if the code here is copied from
+// Quite a bit of the code here is copied from
 // https://github.com/sw-yx/swyxkit/commit/3a309d95275ae32bd311d71838ca36858b222eb6#diff-e52d7cbb53c2deb88bfe15cfc210a387853cf9f243172b6e2844bb88bc9743a3
 import rehypeAutolinkHeadings from 'rehype-autolink-headings'
 import rehypeCodeTitles from 'rehype-code-titles'
