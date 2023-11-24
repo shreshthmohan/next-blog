@@ -1,3 +1,6 @@
+const getPrismThemeStyles = require('./prism-themes/getPrismThemeStyles')
+const getThemeByName = getPrismThemeStyles.getThemeByName
+
 module.exports = {
   // corePlugins: {
   //   preflight: false,
@@ -8,7 +11,20 @@ module.exports = {
     './components/**/*.{js,ts,jsx,tsx}',
   ],
   theme: {
-    extend: {},
+    extend: {
+      typography: {
+        DEFAULT: {
+          css: {
+            ...getThemeByName('prism-base16-ateliersulphurpool.light'),
+          },
+        },
+        invert: {
+          css: {
+            ...getThemeByName('prism-duotone-dark'),
+          },
+        },
+      },
+    },
   },
   plugins: [require('@tailwindcss/typography')],
 }
