@@ -3,7 +3,7 @@ export default function Footer({
   maxWidthClassName = 'max-w-prose',
 }) {
   return (
-    <footer className="border-x-0 border-t border-b-0 border-solid border-gray-300 py-6">
+    <footer className="py-8 prose max-w-prose dark:prose-invert mx-auto">
       <div className={`${maxWidthClassName} mx-auto text-center`}>
         {children}
       </div>

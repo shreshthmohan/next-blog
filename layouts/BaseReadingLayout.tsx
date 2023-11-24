@@ -33,7 +33,7 @@ export default function BaseReadingLayout({
       <MetaHead {...meta} />
       <div className="flex min-h-screen flex-col justify-between">
         <div
-          className={`mx-auto w-full ${maxWidthClassName} px-3 pt-4 sm:pt-6 md:px-0`}
+          className={`mx-auto w-full ${maxWidthClassName} px-3 pt-4 sm:pt-6 md:px-0 border-b dark:border-slate-600`}
         >
           <header className="relative">
             <a className="skip-to-content" href="#main-content">
