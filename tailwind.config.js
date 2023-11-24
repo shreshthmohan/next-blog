@@ -18,7 +18,7 @@ module.exports = {
             'code::after': {
               content: 'normal',
             },
-            ...getThemeByName('prism-base16-ateliersulphurpool.light'),
+            ...getThemeByName('prism-gruvbox-light'),
           },
         },
         invert: {
