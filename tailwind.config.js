@@ -2,9 +2,6 @@ const getPrismThemeStyles = require('./prism-themes/getPrismThemeStyles')
 const getThemeByName = getPrismThemeStyles.getThemeByName
 
 module.exports = {
-  // corePlugins: {
-  //   preflight: false,
-  // },
   content: [
     './pages/**/*.{js,ts,jsx,tsx}',
     './layouts/**/*.{js,ts,jsx,tsx}',
@@ -15,6 +12,12 @@ module.exports = {
       typography: {
         DEFAULT: {
           css: {
+            'code::before': {
+              content: 'normal',
+            },
+            'code::after': {
+              content: 'normal',
+            },
             ...getThemeByName('prism-base16-ateliersulphurpool.light'),
           },
         },
