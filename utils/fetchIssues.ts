@@ -15,6 +15,7 @@ import parse from 'parse-link-header'
 import slugify from 'slugify'
 
 import { siteWide } from 'siteDetails'
+import { get } from 'lodash'
 
 const GH_USER_REPO = siteWide.githubUserRepo
 const GH_OWNER_USER = GH_USER_REPO.split('/')[0]
@@ -22,6 +23,7 @@ const GH_OWNER_USER = GH_USER_REPO.split('/')[0]
 type IssueLabel = { name: string }
 
 type Issue = {
+  number: number
   body: string
   title: string
   html_url: string
@@ -81,7 +83,7 @@ export async function listCategories() {
   const allBlogposts = await listBlogposts()
   const categories = allBlogposts.reduce((acc, { issue }) => {
     const post = issue
-    console.log('post.labels', post.labels)
+    // console.log('post.labels', post.labels)
     post.labels.forEach(labelObj => {
       const label = labelObj.name as string
       if (label.startsWith('category:')) {
@@ -93,7 +95,7 @@ export async function listCategories() {
     })
     return acc
   }, [] as string[])
-  console.log('categories', categories)
+  // console.log('categories', categories)
   return categories
 }
 
@@ -122,11 +124,35 @@ export function extractCategoryNamesFromIssue(issue: Issue) {
       return label.split(':')[1]
     })
 }
+export async function getSingleBlogpost(number: number) {
+  let blogpost = null
+  const authheader = process.env.GH_TOKEN && {
+    Authorization: `token ${process.env.GH_TOKEN}`,
+  }
+
+  const res = await fetch(
+    `https://api.github.com/repos/${GH_USER_REPO}/issues/${number}`,
+    {
+      headers: authheader,
+    },
+  )
+
+  const result = await res.json()
+  if (res.status > 400) {
+    const err = result as { message?: string }
+    throw new Error(res.status + ' ' + res.statusText + '\n' + err.message)
+  }
+  const issue = result as Issue
+  blogpost = { ...parseIssue(issue), issue }
+
+  return blogpost
+}
 
 export async function getBlogpost(slug: string) {
-  const allBlogposts = await listBlogposts()
+  // const allBlogposts = await listBlogposts()
   // find the blogpost that matches this slug
-  const blogpost = allBlogposts.find(post => post.slug === slug)
+
+  const blogpost = await getSingleBlogpost(Number(slug.split('-').pop()))
   const content = await serialize(blogpost.content ?? 'No content', {
     mdxOptions: {
       remarkPlugins: [remarkGfm],
@@ -155,6 +181,8 @@ export async function getBlogpost(slug: string) {
 function parseIssue(issue: Issue) {
   const src = issue.body
 
+  // console.log('issue', issue)
+
   const data = grayMatter(src ?? 'No content')
   let slug: string
   if (data.data.slug) {
@@ -164,6 +192,8 @@ function parseIssue(issue: Issue) {
   } else {
     slug = slugify(issue.title, { remove: /[*+~.,()'"!:@]/g })
   }
+
+  slug = `${slug}-${issue.number}`
 
   return {
     content: data.content,
