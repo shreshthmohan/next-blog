@@ -5,3 +5,7 @@
 .gfm-color-chip {
   @apply ml-0.5 inline-block h-2.5 w-2.5 rounded-full border border-solid border-gray-600;
 }
+
+.intra-page-link {
+  @apply absolute no-underline -ml-[1em] pr-[0.5em] w-full cursor-pointer after:text-gray-300 after:content-['#'] hover:after:text-gray-500 dark:after:text-gray-700 dark:hover:after:text-gray-300;
+}
