@@ -15,7 +15,6 @@ import parse from 'parse-link-header'
 import slugify from 'slugify'
 
 import { siteWide } from 'siteDetails'
-import { get } from 'lodash'
 
 const GH_USER_REPO = siteWide.githubUserRepo
 const GH_OWNER_USER = GH_USER_REPO.split('/')[0]
