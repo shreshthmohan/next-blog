@@ -8,6 +8,12 @@ module.exports = {
         destination: '/hsr',
         permanent: true,
       },
+      {
+        source:
+          '/learn-to-read-write-and-speak-kannada-by-kannada-prasara-parishat-137',
+        destination: '/learn-kannada',
+        permanent: true,
+      },
     ]
   },
 }

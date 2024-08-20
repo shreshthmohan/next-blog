@@ -148,10 +148,13 @@ export async function getSingleBlogpost(number: number) {
 }
 
 export async function getBlogpost(slug: string) {
-  // const allBlogposts = await listBlogposts()
+  const allBlogposts = await listBlogposts()
   // find the blogpost that matches this slug
 
-  const blogpost = await getSingleBlogpost(Number(slug.split('-').pop()))
+  // const blogpost = await getSingleBlogpost(Number(slug.split('-').pop()))
+
+  const blogpost = allBlogposts.find(post => post.slug === slug)
+
   const content = await serialize(blogpost.content ?? 'No content', {
     mdxOptions: {
       remarkPlugins: [remarkGfm],
@@ -192,7 +195,7 @@ function parseIssue(issue: Issue) {
     slug = slugify(issue.title, { remove: /[*+~.,()'"!:@]/g })
   }
 
-  slug = `${slug}-${issue.number}`
+  slug = `${slug}`
 
   return {
     content: data.content,
