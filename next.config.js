@@ -14,6 +14,11 @@ module.exports = {
         destination: '/learn-kannada',
         permanent: true,
       },
+      {
+        source: '/ideas',
+        destination: 'https://x.com/shreshthmohan/status/1725713727822172609',
+        permanent: false,
+      },
     ]
   },
 }
